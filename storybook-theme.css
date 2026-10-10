@@ -1,4 +1,5 @@
-/* Megan Trip — Ishigaki storybook skin (light-only).
+/* Loaded only with ui.visualStyle="storybook"; disabled for editorial trips. */
+/* Travel Lite — opt-in storybook style (light-only).
    No gradients, shadows, or duplicated itinerary data.
    SPDX-License-Identifier: AGPL-3.0-or-later
 */
@@ -208,7 +209,7 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
   align-self: center;
   width: 100%;
   aspect-ratio: 640 / 365;
-  background: url("./assets/ishigaki-scene.svg") center / contain no-repeat;
+  background: url("./assets/storybook/hero.svg") center / contain no-repeat;
   pointer-events: none;
 }
 .trip-overview-stats {
@@ -268,20 +269,14 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
   width: 88px;
   height: 88px;
   border-radius: 20px;
-  background: url("./assets/car.svg") center/contain no-repeat;
+  background: url("./assets/storybook/map.svg") center/contain no-repeat;
   pointer-events: none;
   justify-self: end;
 }
-.trip-overview-day:nth-child(1) { background: #FFF8F1; }
-.trip-overview-day:nth-child(1)::after { background-image: url("./assets/car.svg"); }
-.trip-overview-day:nth-child(2) { background: #F4FBFE; }
-.trip-overview-day:nth-child(2)::after { background-image: url("./assets/boat.svg"); }
-.trip-overview-day:nth-child(3) { background: #F8FBEF; }
-.trip-overview-day:nth-child(3)::after { background-image: url("./assets/icecream.svg"); }
-.trip-overview-day:nth-child(4) { background: #FFFAF4; }
-.trip-overview-day:nth-child(4)::after { background-image: url("./assets/lighthouse.svg"); }
-.trip-overview-day:nth-child(5) { background: #F4FBFE; }
-.trip-overview-day:nth-child(5)::after { background-image: url("./assets/plane.svg"); }
+.trip-overview-day:nth-child(4n + 1) { background: #FFF8F1; }
+.trip-overview-day:nth-child(4n + 2) { background: #F4FBFE; }
+.trip-overview-day:nth-child(4n + 3) { background: #F8FBEF; }
+.trip-overview-day:nth-child(4n + 4) { background: #FFFAF4; }
 .trip-overview-day:hover, .trip-open-decision:hover { background-color: var(--water); }
 .trip-overview-day-meta { grid-area: meta; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
 .trip-overview-day-meta span {
@@ -341,13 +336,10 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
   right: 15px;
   width: 60px;
   height: 60px;
-  background: url("./assets/bay.svg") center/contain no-repeat;
+  background: url("./assets/storybook/map.svg") center/contain no-repeat;
   pointer-events: none;
 }
-.trip-highlight-card:nth-child(1)::after { background-image: url("./assets/boat.svg"); }
-.trip-highlight-card:nth-child(2)::after { background-image: url("./assets/manta.svg"); }
-.trip-highlight-card:nth-child(3)::after { background-image: url("./assets/car.svg"); }
-.trip-open-decision::after { background-image: url("./assets/manta.svg"); }
+.trip-open-decision::after { background-image: url("./assets/storybook/map.svg"); }
 .trip-highlight-meta { color: var(--ink); flex-wrap: wrap; }
 .trip-highlight-meta small { color: var(--muted-ink); }
 .trip-highlight-card h3, .trip-open-decision strong { color: var(--ink); font: 700 1.04rem/1.34 var(--font-utility); }
@@ -372,14 +364,9 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
   transform: translateY(-50%);
   width: 134px;
   height: 134px;
-  background: url("./assets/bay.svg") center/contain no-repeat;
+  background: url("./assets/storybook/map.svg") center/contain no-repeat;
   pointer-events: none;
 }
-.day-summary[data-storybook-day="2026-09-18"]::after { background-image: url("./assets/car.svg"); }
-.day-summary[data-storybook-day="2026-09-19"]::after { background-image: url("./assets/boat.svg"); }
-.day-summary[data-storybook-day="2026-09-20"]::after { background-image: url("./assets/icecream.svg"); }
-.day-summary[data-storybook-day="2026-09-21"]::after { background-image: url("./assets/lighthouse.svg"); }
-.day-summary[data-storybook-day="2026-09-22"]::after { background-image: url("./assets/plane.svg"); }
 .trip-day-view > .day-summary h2 {
   max-width: none;
   margin: 6px 0;
@@ -448,16 +435,16 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
   width: 36px;
   height: 36px;
   margin-top: 11px;
-  background: url("./assets/bay.svg") center / contain no-repeat;
+  background: url("./assets/storybook/nature.svg") center / contain no-repeat;
   pointer-events: none;
 }
-.trip-v2-item[data-storybook-kind="flight"] .timeline-time::after { background-image: url("./assets/plane.svg"); }
-.trip-v2-item[data-storybook-kind="car"] .timeline-time::after { background-image: url("./assets/car.svg"); }
-.trip-v2-item[data-storybook-kind="boat"] .timeline-time::after { background-image: url("./assets/boat.svg"); }
-.trip-v2-item[data-storybook-kind="food"] .timeline-time::after { background-image: url("./assets/icecream.svg"); }
-.trip-v2-item[data-storybook-kind="lighthouse"] .timeline-time::after { background-image: url("./assets/lighthouse.svg"); }
-.trip-v2-item[data-storybook-kind="hotel"] .timeline-time::after { background-image: url("./assets/hotel.svg"); }
-.trip-v2-item[data-storybook-kind="manta"] .timeline-time::after { background-image: url("./assets/manta.svg"); }
+.trip-v2-item[data-storybook-kind="plane"] .timeline-time::after { background-image: url("./assets/storybook/plane.svg"); }
+.trip-v2-item[data-storybook-kind="car"] .timeline-time::after { background-image: url("./assets/storybook/car.svg"); }
+.trip-v2-item[data-storybook-kind="boat"] .timeline-time::after { background-image: url("./assets/storybook/boat.svg"); }
+.trip-v2-item[data-storybook-kind="food"] .timeline-time::after { background-image: url("./assets/storybook/food.svg"); }
+.trip-v2-item[data-storybook-kind="landmark"] .timeline-time::after { background-image: url("./assets/storybook/landmark.svg"); }
+.trip-v2-item[data-storybook-kind="hotel"] .timeline-time::after { background-image: url("./assets/storybook/hotel.svg"); }
+.trip-v2-item[data-storybook-kind="sea"] .timeline-time::after { background-image: url("./assets/storybook/sea.svg"); }
 .trip-v2-item .type-pill { padding: 2px 8px; background: var(--yamabuki); color: var(--ink); }
 .timeline-rail::before { width: 2px; background: var(--ink); }
 .timeline-dot { background: var(--coral); border: 2px solid var(--ink); }
@@ -659,7 +646,7 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
 }
 
 /* ---------------------------------------------------------------
-   Ishigaki motion + real day timeline. Kept after the existing skin
+   Optional storybook motion + real day timeline. Kept after the existing skin
    so the rest of Travel Lite's responsive layout stays unchanged.
    --------------------------------------------------------------- */
 
@@ -818,20 +805,20 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
   top: 15px;
   width: 39px;
   height: 39px;
-  background: url("./assets/bay.svg") center/contain no-repeat;
+  background: url("./assets/storybook/map.svg") center/contain no-repeat;
   pointer-events: none;
 }
 .trip-v2-timeline .trip-v2-item[data-storybook-kind] { position: relative; }
 .trip-v2-timeline .trip-v2-item[data-storybook-kind] > .timeline-content {
   padding-top: 0;
 }
-.trip-v2-timeline .trip-v2-item[data-storybook-kind="flight"] .timeline-content::after { background-image: url("./assets/plane.svg"); }
-.trip-v2-timeline .trip-v2-item[data-storybook-kind="car"] .timeline-content::after { background-image: url("./assets/car.svg"); }
-.trip-v2-timeline .trip-v2-item[data-storybook-kind="boat"] .timeline-content::after { background-image: url("./assets/boat.svg"); }
-.trip-v2-timeline .trip-v2-item[data-storybook-kind="food"] .timeline-content::after { background-image: url("./assets/icecream.svg"); }
-.trip-v2-timeline .trip-v2-item[data-storybook-kind="lighthouse"] .timeline-content::after { background-image: url("./assets/lighthouse.svg"); }
-.trip-v2-timeline .trip-v2-item[data-storybook-kind="hotel"] .timeline-content::after { background-image: url("./assets/hotel.svg"); }
-.trip-v2-timeline .trip-v2-item[data-storybook-kind="manta"] .timeline-content::after { background-image: url("./assets/manta.svg"); }
+.trip-v2-timeline .trip-v2-item[data-storybook-kind="plane"] .timeline-content::after { background-image: url("./assets/storybook/plane.svg"); }
+.trip-v2-timeline .trip-v2-item[data-storybook-kind="car"] .timeline-content::after { background-image: url("./assets/storybook/car.svg"); }
+.trip-v2-timeline .trip-v2-item[data-storybook-kind="boat"] .timeline-content::after { background-image: url("./assets/storybook/boat.svg"); }
+.trip-v2-timeline .trip-v2-item[data-storybook-kind="food"] .timeline-content::after { background-image: url("./assets/storybook/food.svg"); }
+.trip-v2-timeline .trip-v2-item[data-storybook-kind="landmark"] .timeline-content::after { background-image: url("./assets/storybook/landmark.svg"); }
+.trip-v2-timeline .trip-v2-item[data-storybook-kind="hotel"] .timeline-content::after { background-image: url("./assets/storybook/hotel.svg"); }
+.trip-v2-timeline .trip-v2-item[data-storybook-kind="sea"] .timeline-content::after { background-image: url("./assets/storybook/sea.svg"); }
 .must-go-tag,
 .transport-tag {
   display: inline-flex;
@@ -964,4 +951,47 @@ html[data-motion="reduce"] *::after {
     transition-duration: 0s !important;
     scroll-behavior: auto !important;
   }
+}
+
+.trip-v2-item[data-storybook-kind="city"] .timeline-content::after { background-image: url("./assets/storybook/city.svg"); }
+
+.trip-v2-item[data-storybook-kind="train"] .timeline-content::after { background-image: url("./assets/storybook/train.svg"); }
+
+.trip-v2-item[data-storybook-kind="map"] .timeline-content::after { background-image: url("./assets/storybook/map.svg"); }
+
+.trip-v2-item[data-storybook-kind="nature"] .timeline-content::after { background-image: url("./assets/storybook/nature.svg"); }
+
+.trip-overview-day[data-storybook-art="plane"]::after, .trip-highlight-card[data-storybook-art="plane"]::after, .trip-day-view > .day-summary[data-storybook-art="plane"]::after, .trip-open-decision[data-storybook-art="plane"]::after { background-image: url("./assets/storybook/plane.svg"); }
+.trip-overview-day[data-storybook-art="car"]::after, .trip-highlight-card[data-storybook-art="car"]::after, .trip-day-view > .day-summary[data-storybook-art="car"]::after, .trip-open-decision[data-storybook-art="car"]::after { background-image: url("./assets/storybook/car.svg"); }
+.trip-overview-day[data-storybook-art="boat"]::after, .trip-highlight-card[data-storybook-art="boat"]::after, .trip-day-view > .day-summary[data-storybook-art="boat"]::after, .trip-open-decision[data-storybook-art="boat"]::after { background-image: url("./assets/storybook/boat.svg"); }
+.trip-overview-day[data-storybook-art="food"]::after, .trip-highlight-card[data-storybook-art="food"]::after, .trip-day-view > .day-summary[data-storybook-art="food"]::after, .trip-open-decision[data-storybook-art="food"]::after { background-image: url("./assets/storybook/food.svg"); }
+.trip-overview-day[data-storybook-art="landmark"]::after, .trip-highlight-card[data-storybook-art="landmark"]::after, .trip-day-view > .day-summary[data-storybook-art="landmark"]::after, .trip-open-decision[data-storybook-art="landmark"]::after { background-image: url("./assets/storybook/landmark.svg"); }
+.trip-overview-day[data-storybook-art="nature"]::after, .trip-highlight-card[data-storybook-art="nature"]::after, .trip-day-view > .day-summary[data-storybook-art="nature"]::after, .trip-open-decision[data-storybook-art="nature"]::after { background-image: url("./assets/storybook/nature.svg"); }
+.trip-overview-day[data-storybook-art="sea"]::after, .trip-highlight-card[data-storybook-art="sea"]::after, .trip-day-view > .day-summary[data-storybook-art="sea"]::after, .trip-open-decision[data-storybook-art="sea"]::after { background-image: url("./assets/storybook/sea.svg"); }
+.trip-overview-day[data-storybook-art="hotel"]::after, .trip-highlight-card[data-storybook-art="hotel"]::after, .trip-day-view > .day-summary[data-storybook-art="hotel"]::after, .trip-open-decision[data-storybook-art="hotel"]::after { background-image: url("./assets/storybook/hotel.svg"); }
+.trip-overview-day[data-storybook-art="city"]::after, .trip-highlight-card[data-storybook-art="city"]::after, .trip-day-view > .day-summary[data-storybook-art="city"]::after, .trip-open-decision[data-storybook-art="city"]::after { background-image: url("./assets/storybook/city.svg"); }
+.trip-overview-day[data-storybook-art="train"]::after, .trip-highlight-card[data-storybook-art="train"]::after, .trip-day-view > .day-summary[data-storybook-art="train"]::after, .trip-open-decision[data-storybook-art="train"]::after { background-image: url("./assets/storybook/train.svg"); }
+.trip-overview-day[data-storybook-art="map"]::after, .trip-highlight-card[data-storybook-art="map"]::after, .trip-day-view > .day-summary[data-storybook-art="map"]::after, .trip-open-decision[data-storybook-art="map"]::after { background-image: url("./assets/storybook/map.svg"); }
+
+:root[data-visual-style="storybook"] .quick-theme-toggle { display: none !important; }
+@media (max-width: 520px) { .trip-v2-timeline .trip-v2-item > .timeline-content { padding-top: 0; } }
+
+:root[data-visual-style="storybook"] .motion-choice[aria-pressed="true"] { background: var(--bamboo); }
+
+
+/* Long-trip date dropdown uses a flat hand-drawn chevron, no CSS gradients. */
+.long-trip-select-wrap { position: relative; }
+.long-trip-select {
+  background: #fff !important;
+  background-image: none !important;
+}
+.long-trip-select-wrap::after {
+  content: "⌄";
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-56%);
+  font-weight: 800;
+  color: var(--ink);
+  pointer-events: none;
 }

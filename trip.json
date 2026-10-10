@@ -33,7 +33,8 @@
       "navMap": "地圖",
       "navCheck": "清單",
       "navMore": "資訊"
-    }
+    },
+    "visualStyle": "storybook"
   },
   "providers": {
     "mapStyle": "https://tiles.openfreemap.org/styles/liberty",
@@ -49,7 +50,8 @@
       "title": "連續兩天包船船潛",
       "icon": "◉",
       "status": "已付款（原文件）",
-      "note": "集合 08:10；預計 07:50 提前抵達找停車位。出船約 08:30，返程 16:00 或 16:30。"
+      "note": "集合 08:10；預計 07:50 提前抵達找停車位。出船約 08:30，返程 16:00 或 16:30。",
+      "illustration": "boat"
     },
     {
       "id": "highlight-shore",
@@ -57,7 +59,8 @@
       "title": "岸潛候選地點",
       "icon": "◇",
       "status": "候選／未定案",
-      "note": "米原、青之洞窟、Osaki、山原、川平石崎海域共五處；並非五個確定下水點。請向當地合格潛店確認海況、入水條件及安全性。"
+      "note": "米原、青之洞窟、Osaki、山原、川平石崎海域共五處；並非五個確定下水點。請向當地合格潛店確認海況、入水條件及安全性。",
+      "illustration": "sea"
     },
     {
       "id": "highlight-selfdrive",
@@ -65,7 +68,8 @@
       "title": "自駕與島上景點",
       "icon": "↗",
       "status": "已預定（原文件）",
-      "note": "原文件安排三輛五人座車；實際行車路線與時間需依當日狀況確認。"
+      "note": "原文件安排三輛五人座車；實際行車路線與時間需依當日狀況確認。",
+      "illustration": "car"
     }
   ],
   "days": [
@@ -198,7 +202,8 @@
           "mapsUrl": "https://maps.app.goo.gl/SRKjNoR4kbzc18d98",
           "note": "雙床房、一人一床；住宿未含早餐，附近有全家及超市。"
         }
-      ]
+      ],
+      "illustration": "car"
     },
     {
       "id": "d2",
@@ -279,7 +284,8 @@
           "mapQuery": "八重山村 居酒屋, 石垣島 日本",
           "note": "原文件安排晚餐，沒有指定時間或訂位狀態。"
         }
-      ]
+      ],
+      "illustration": "boat"
     },
     {
       "id": "d3",
@@ -348,7 +354,8 @@
           "location": "Mirumiru Hompo Honten",
           "mapQuery": "Mirumiru Hompo Honten, 石垣島 日本"
         }
-      ]
+      ],
+      "illustration": "food"
     },
     {
       "id": "d4",
@@ -454,7 +461,8 @@
           }
         }
       ],
-      "note": "來源將陸遊和岸潛都列於 9/21，未提供起訖時間與最終優先順序。"
+      "note": "來源將陸遊和岸潛都列於 9/21，未提供起訖時間與最終優先順序。",
+      "illustration": "landmark"
     },
     {
       "id": "d5",
@@ -513,7 +521,8 @@
           "note": "來源只寫『09:25–09:35』，09:35 可能是台灣當地抵達時刻，尚未驗證。請以航空公司通知為準。",
           "transportMode": "flight"
         }
-      ]
+      ],
+      "illustration": "plane"
     }
   ],
   "todos": [

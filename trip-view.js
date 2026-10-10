@@ -2,23 +2,26 @@
 (() => {
   let tripMode = "overview";
   let lastRenderedDate = null;
-  // Deliberately explicit: travel mode never needs to be guessed from a title.
-  const transportModes = {
-    flight: { label: "飛機", symbol: "✈" },
-    drive: { label: "自駕", symbol: "▰" },
-    boat: { label: "搭船", symbol: "≈" },
-    walk: { label: "步行", symbol: "↗" },
-  };
-
-  function transportBadge(item) {
-    const mode = Object.hasOwn(transportModes, item.transportMode) ? transportModes[item.transportMode] : null;
-    if (!mode) return "";
-    return `<span class="transport-tag transport-tag--${item.transportMode}" aria-label="交通方式：${mode.label}"><span aria-hidden="true">${mode.symbol}</span>${mode.label}</span>`;
+  const TRANSPORT_MODES = Object.freeze({
+    flight: { zh: "飛機", en: "Flight", symbol: "✈" },
+    drive: { zh: "自駕", en: "Drive", symbol: "▰" },
+    boat: { zh: "搭船", en: "Boat", symbol: "≈" },
+    train: { zh: "火車", en: "Train", symbol: "≋" },
+    bus: { zh: "巴士", en: "Bus", symbol: "▰" },
+    walk: { zh: "步行", en: "Walk", symbol: "↗" },
+  });
+  function localized(zh, en) {
+    return /^zh/i.test(state.data?.ui?.locale || "") ? zh : en;
   }
-
+  function transportTag(item) {
+    const mode = Object.hasOwn(TRANSPORT_MODES, item.transportMode) ? TRANSPORT_MODES[item.transportMode] : null;
+    if (!mode) return "";
+    const name = localized(mode.zh, mode.en);
+    return `<span class="transport-tag transport-tag--${item.transportMode}" aria-label="${escapeAttr(name)}"><span aria-hidden="true">${mode.symbol}</span>${escapeHtml(name)}</span>`;
+  }
   function timeLabel(item) {
     if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(item.start || "")) {
-      return '<span class="timeline-time timeline-time--floating">時間未定</span>';
+      return `<span class="timeline-time timeline-time--floating">${localized("時間未定", "Time TBD")}</span>`;
     }
     return `<time class="timeline-time" datetime="${escapeAttr(item.start)}">${escapeHtml(item.start)}</time>`;
   }
@@ -60,7 +63,7 @@
 
   function dayRouteText(day) {
     const stops = routeStops(day);
-    if (!stops.length) return "尚無路線摘要";
+    if (!stops.length) return "No route summary";
     return stops.slice(0, 5).join(" → ") + (stops.length > 5 ? " → …" : "");
   }
 
@@ -126,8 +129,8 @@
     const first = stops[0];
     const last = stops[stops.length - 1];
     return `<section class="trip-route-summary composition-operational">
-      <div class="trip-route-heading"><div><p class="eyebrow">當日路線</p><h3>${escapeHtml(day.routeLabel || "路線一覽")}</h3></div><span>${stops.length} 站</span></div>
-      <div class="trip-route-endpoints"><div><small>起點</small><strong>${escapeHtml(first)}</strong></div><span aria-hidden="true">→</span><div class="end"><small>終點</small><strong>${escapeHtml(last)}</strong></div></div>
+      <div class="trip-route-heading"><div><p class="eyebrow">Day route</p><h3>${escapeHtml(day.routeLabel || "At a glance")}</h3></div><span>${stops.length} stop${stops.length === 1 ? "" : "s"}</span></div>
+      <div class="trip-route-endpoints"><div><small>Start</small><strong>${escapeHtml(first)}</strong></div><span aria-hidden="true">→</span><div class="end"><small>End</small><strong>${escapeHtml(last)}</strong></div></div>
       ${stops.length > 2 ? `<div class="trip-route-steps">${stops.map((stop, index) => `<span><b>${index + 1}</b>${escapeHtml(stop)}</span>`).join("")}</div>` : ""}
     </section>`;
   }
@@ -146,7 +149,7 @@
       <div class="trip-highlight-meta"><span>${escapeHtml(highlightDate(highlight))}</span>${highlight.status ? `<small>${escapeHtml(highlight.status)}</small>` : ""}</div>
       <h3>${highlight.icon ? `<span aria-hidden="true">${escapeHtml(highlight.icon)}</span> ` : ""}${escapeHtml(highlight.title || "Activity")}</h3>
       ${highlight.note ? `<p>${escapeHtml(highlight.note)}</p>` : ""}
-      ${url ? `<a class="trip-text-link" href="${escapeAttr(url)}" target="_blank" rel="noreferrer">查看資料 ↗</a>` : ""}
+      ${url ? `<a class="trip-text-link" href="${escapeAttr(url)}" target="_blank" rel="noreferrer">Open details ↗</a>` : ""}
     </article>`;
   }
 
@@ -156,7 +159,7 @@
       <div class="trip-overview-day-meta"><span>${escapeHtml(day.label || "Day")}</span><time>${prettyDate(day.date, { weekday: "short" })}</time></div>
       <h3>${escapeHtml(day.title || "Trip day")}</h3>
       <p>${escapeHtml(dayRouteText(day))}</p>
-      <div class="trip-overview-day-foot"><span>${day.items?.length || 0} 項安排</span>${open ? `<span class="trip-open-count">${open} 待確認</span>` : ""}<span aria-hidden="true">→</span></div>
+      <div class="trip-overview-day-foot"><span>${day.items?.length || 0} planned</span>${open ? `<span class="trip-open-count">${open} TBD</span>` : ""}<span aria-hidden="true">→</span></div>
     </button>`;
   }
 
@@ -170,21 +173,21 @@
     root.innerHTML = `<div class="trip-v2 trip-overview-view">
       ${tripTabs()}
       <section class="trip-overview-hero composition-identity">
-        <p class="eyebrow">旅程總覽</p>
+        <p class="eyebrow">Trip overview</p>
         <h2>${escapeHtml(state.data.trip.title)}</h2>
         <p>${escapeHtml(dateRangeLabel(state.data.trip))}</p>
-        <div class="trip-overview-stats"><span><strong>${days.length}</strong> 天</span><span><strong>${stopCount}</strong> 項行程</span>${openDecisions.length ? `<span><strong>${openDecisions.length}</strong> 項待確認</span>` : ""}</div>
+        <div class="trip-overview-stats"><span><strong>${days.length}</strong> days</span><span><strong>${stopCount}</strong> planned stops</span>${openDecisions.length ? `<span><strong>${openDecisions.length}</strong> open choice${openDecisions.length === 1 ? "" : "s"}</span>` : ""}</div>
       </section>
       <section class="trip-overview-days" aria-label="Daily overview">${days.map(overviewDayCard).join("")}</section>
-      ${highlights.length ? `<section class="trip-overview-section"><div class="trip-section-heading"><div><p class="eyebrow">彈性</p><h2>景點與彈性活動</h2></div><span>${highlights.length}</span></div><div class="trip-highlight-grid">${highlights.map(highlightCard).join("")}</div></section>` : ""}
-      ${openDecisions.length ? `<section class="trip-overview-section"><div class="trip-section-heading"><div><p class="eyebrow">待定</p><h2>待確認事項</h2></div><span>${openDecisions.length}</span></div><div class="trip-open-decisions">${openDecisions.map(({ day, item }) => `<button type="button" class="trip-open-decision composition-narrative" data-trip-day="${escapeAttr(day.date)}"><span>${prettyDate(day.date, { weekday: "short" })}</span><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.decision?.prompt || "待當天決定")}</p><small>查看當天 →</small></button>`).join("")}</div></section>` : ""}
+      ${highlights.length ? `<section class="trip-overview-section"><div class="trip-section-heading"><div><p class="eyebrow">Flexible</p><h2>Highlights & activities</h2></div><span>${highlights.length}</span></div><div class="trip-highlight-grid">${highlights.map(highlightCard).join("")}</div></section>` : ""}
+      ${openDecisions.length ? `<section class="trip-overview-section"><div class="trip-section-heading"><div><p class="eyebrow">TBD</p><h2>Open decisions</h2></div><span>${openDecisions.length}</span></div><div class="trip-open-decisions">${openDecisions.map(({ day, item }) => `<button type="button" class="trip-open-decision composition-narrative" data-trip-day="${escapeAttr(day.date)}"><span>${prettyDate(day.date, { weekday: "short" })}</span><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.decision?.prompt || "Decide on the day")}</p><small>View day →</small></button>`).join("")}</div></section>` : ""}
     </div>`;
 
     attachOverviewHandlers();
   }
 
   function tripTabs() {
-    const overview = `<button class="day-chip trip-overview-chip ${tripMode === "overview" ? "active" : ""}" type="button" data-trip-mode="overview"><strong>總覽</strong><small>行程</small></button>`;
+    const overview = `<button class="day-chip trip-overview-chip ${tripMode === "overview" ? "active" : ""}" type="button" data-trip-mode="overview"><strong>Overview</strong><small>Trip</small></button>`;
     const days = state.data.days.map((day) => `<button class="day-chip ${tripMode === day.date ? "active" : ""}" type="button" data-trip-day="${escapeAttr(day.date)}"><strong>${escapeHtml(day.label)}</strong><small>${prettyDate(day.date)}</small></button>`).join("");
     return `<div class="day-tabs trip-v2-tabs" aria-label="Trip sections">${overview}${days}</div>`;
   }
@@ -203,51 +206,68 @@
   }
 
   function renderDay(day) {
-    // The day body is replaced on navigation. Animate only when a new date
-    // appears, not when weather or other same-day content re-renders.
+    const storybook = typeof isIllustratedStyle === "function" && isIllustratedStyle();
     const isNewDay = lastRenderedDate !== day.date;
     lastRenderedDate = day.date;
+
     const currentDate = zonedNow(state.data.trip.timezone).date;
     const now = zonedNow(state.data.trip.timezone);
     const timeline = (day.items || []).map((item, index) => {
-      const isCurrent = day.date === currentDate && now.minuteOfDay >= toMinutes(item.start) && now.minuteOfDay < toMinutes(item.end || item.start);
-      return `<li class="trip-stop-wrap">
-        <article class="timeline-item trip-v2-item ${isCurrent ? "current" : ""} ${item.mustGo ? "trip-must-go" : ""}">
-          ${timeLabel(item)}
-          <div class="timeline-content">
-            <div class="trip-item-top"><div>
-              <div class="item-heading">
-                <h3>${escapeHtml(item.title)}</h3>
-                ${item.mustGo ? '<span class="must-go-tag" aria-label="行程精選：必去">★ 必去</span>' : ""}
-                ${item.type ? `<span class="type-pill">${escapeHtml(item.type)}</span>` : ""}
-              </div>
-              ${item.transportMode ? `<div class="trip-transport-meta">${transportBadge(item)}</div>` : ""}
-              ${item.location ? `<p>${escapeHtml(item.location)}</p>` : ""}
-            </div>${compactActions(item)}</div>
-            ${item.note ? `<p class="timeline-note">${escapeHtml(item.note)}</p>` : ""}
-            ${supplementaryContent(item)}
-          </div>
-        </article>
-        ${index < day.items.length - 1 ? transferHtml(item) : ""}
-      </li>`;
+      const validTime = /^([01]\d|2[0-3]):[0-5]\d$/.test(item.start || "");
+      const isCurrent = (!storybook || validTime) && day.date === currentDate &&
+        now.minuteOfDay >= toMinutes(item.start) &&
+        now.minuteOfDay < toMinutes(item.end || item.start);
+
+      const kind = item.type ? `<span class="type-pill">${escapeHtml(item.type)}</span>` : "";
+      const highlight = item.mustGo === true
+        ? `<span class="must-go-tag" aria-label="${localized("編輯精選", "Curated highlight")}">${localized("★ 必去", "★ Highlight")}</span>`
+        : "";
+      const mode = transportTag(item);
+      const itemTop = `<div class="trip-item-top"><div><div class="item-heading"><h3>${escapeHtml(item.title)}</h3>${highlight}${kind}</div>${mode ? `<div class="trip-transport-meta">${mode}</div>` : ""}${item.location ? `<p>${escapeHtml(item.location)}</p>` : ""}</div>${compactActions(item)}</div>`;
+      const details = `<div class="timeline-content">${itemTop}${item.note ? `<p class="timeline-note">${escapeHtml(item.note)}</p>` : ""}${supplementaryContent(item)}</div>`;
+      const currentClass = isCurrent ? "current" : "";
+      if (storybook) {
+        return `<li class="trip-stop-wrap">
+          <article class="timeline-item trip-v2-item ${currentClass} ${item.mustGo === true ? "trip-must-go" : ""}">
+            ${timeLabel(item)}${details}
+          </article>${index < day.items.length - 1 ? transferHtml(item) : ""}
+        </li>`;
+      }
+      return `<div class="trip-stop-wrap">
+        <article class="timeline-item trip-v2-item ${currentClass}">
+          <div class="timeline-time">${escapeHtml(item.start || "TBD")}</div>
+          <div class="timeline-rail"><div class="timeline-dot"></div></div>
+          ${details}
+        </article>${index < day.items.length - 1 ? transferHtml(item) : ""}
+      </div>`;
     }).join("");
 
-    root.innerHTML = `<div class="trip-v2 trip-day-view ${isNewDay ? "day-switch-enter" : ""}">
-      ${tripTabs()}
-      <section class="day-summary composition-identity"><p class="eyebrow">${escapeHtml(day.label || "")} · ${prettyDate(day.date, { weekday: "short" })}</p><h2>${escapeHtml(day.title || "Trip")}</h2><p>${day.items?.length || 0} 項行程</p>${day.note ? `<p class="day-note">${escapeHtml(day.note)}</p>` : ""}</section>
-      ${routeSummaryCard(day)}
-      <section class="trip-timeline-section" aria-label="每日時間軸">
-        <div class="trip-timeline-heading"><h3>每日時間軸</h3><p>依原行程順序排列 · 未定時間保留彈性</p></div>
-        <ol class="timeline trip-v2-timeline">${timeline || `<li class="empty-state"><p>目前沒有安排。</p></li>`}</ol>
-      </section>
-    </div>`;
+    const summary = `<section class="day-summary composition-identity">
+        <p class="eyebrow">${escapeHtml(day.label || "")} · ${prettyDate(day.date, { weekday: "short" })}</p>
+        <h2>${escapeHtml(day.title || "Trip")}</h2>
+        <p>${day.items?.length || 0} ${localized("項行程", "planned stops")}</p>
+        ${day.note ? `<p class="day-note">${escapeHtml(day.note)}</p>` : ""}
+      </section>`;
 
+    const timelineView = storybook
+      ? `<section class="trip-timeline-section" aria-label="${localized("每日時間軸", "Day timeline")}">
+          <div class="trip-timeline-heading"><h3>${localized("每日時間軸", "Day timeline")}</h3><p>${localized("依原行程順序排列 · 未定時間保留彈性", "Published order · flexible times stay flexible")}</p></div>
+          <ol class="timeline trip-v2-timeline">${timeline || `<li class="empty-state"><p>No plans yet.</p></li>`}</ol>
+        </section>`
+      : `<section class="timeline trip-v2-timeline composition-sequence">${timeline || `<div class="empty-state"><p>No plans yet.</p></div>`}</section>`;
+
+    root.innerHTML = `<div class="trip-v2 trip-day-view ${storybook && isNewDay ? "day-switch-enter" : ""}">
+      ${tripTabs()}
+      ${summary}
+      ${routeSummaryCard(day)}
+      ${timelineView}
+    </div>`;
     attachOverviewHandlers();
   }
 
   renderTrip = function renderTripOverviewV2() {
     if (!state.data?.days?.length) {
-      root.innerHTML = `<section class="panel empty-state"><p>尚無行程資料。</p></section>`;
+      root.innerHTML = `<section class="panel empty-state"><p>No trip days yet.</p></section>`;
       return;
     }
     if (tripMode === "overview") {

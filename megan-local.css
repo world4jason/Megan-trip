@@ -1,0 +1,31 @@
+/* Only Megan-specific, source-grounded island artwork; shared CSS and
+ * layout remain byte-for-byte identical to Travel-lite-Template.
+ * This sheet NEVER alters the other seven shared Style Packs.
+ * SPDX-License-Identifier: AGPL-3.0-or-later */
+:root[data-visual-style="storybook"] .trip-overview-hero::after {
+  background-image: url("./assets/ishigaki-scene.svg") !important;
+}
+:root[data-visual-style="storybook"] .trip-overview-day[data-storybook-art="car"]::after,
+:root[data-visual-style="storybook"] .day-summary[data-storybook-art="car"]::after {
+  background-image: url("./assets/car.svg") !important;
+}
+:root[data-visual-style="storybook"] .trip-overview-day[data-storybook-art="boat"]::after,
+:root[data-visual-style="storybook"] .day-summary[data-storybook-art="boat"]::after,
+:root[data-visual-style="storybook"] .trip-highlight-card[data-storybook-art="boat"]::after {
+  background-image: url("./assets/boat.svg") !important;
+}
+:root[data-visual-style="storybook"] .trip-overview-day[data-storybook-art="food"]::after,
+:root[data-visual-style="storybook"] .day-summary[data-storybook-art="food"]::after {
+  background-image: url("./assets/icecream.svg") !important;
+}
+:root[data-visual-style="storybook"] .trip-overview-day[data-storybook-art="landmark"]::after,
+:root[data-visual-style="storybook"] .day-summary[data-storybook-art="landmark"]::after {
+  background-image: url("./assets/lighthouse.svg") !important;
+}
+:root[data-visual-style="storybook"] .trip-overview-day[data-storybook-art="plane"]::after,
+:root[data-visual-style="storybook"] .day-summary[data-storybook-art="plane"]::after {
+  background-image: url("./assets/plane.svg") !important;
+}
+:root[data-visual-style="storybook"] .trip-highlight-card[data-storybook-art="sea"]::after {
+  background-image: url("./assets/manta.svg") !important;
+}

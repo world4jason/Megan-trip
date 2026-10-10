@@ -17,7 +17,7 @@
 | 清單 | 39 項裝備與行李清單、5 項行前核對，進度只存在當前裝置 |
 | 資訊 | 航班、租車、住宿、船潛、費用、聯絡資訊與備註 |
 
-支援繁體中文導覽、手機／桌機響應式佈局、固定淺色繪本主題、PWA/離線快取與可分享的行程深層連結。
+支援繁體中文導覽、手機／桌機響應式佈局、**九種可切換的視覺外觀**（八套 Style Pack，Editorial 分成淺色與深色）、PWA/離線快取與可分享的行程深層連結。
 
 **地圖限制：**原始文件除了住宿與船潛集合點的 Google Maps 分享連結之外，沒有提供經緯度，因此這版不會杜撰其他精確地點座標。地圖分頁仍保留每日地點清單與「Open in Maps」外開導航；互動地圖上的定位標記待日後核實座標後再補。
 
@@ -60,7 +60,7 @@ node --test tests/trip-data.test.mjs
 
 ```bash
 npm install
-npm run test:mobile
+npm run test:megan-styles
 ```
 
 ## 模板與授權
@@ -68,22 +68,36 @@ npm run test:mobile
 此專案沿用 `world4jason/Travel-lite-Template` 的 HTML/CSS/JS、資料模型、PWA、測試與相關文件。上游採用 **AGPL-3.0-or-later**，本 repo 保留原本的 [LICENSE](./LICENSE)、[NOTICE.md](./NOTICE.md) 與 [AGENTS.md](./AGENTS.md)。
 
 若要調整行程資料，請參考 [docs/TRIP_SCHEMA.md](./docs/TRIP_SCHEMA.md) 與 [docs/SOURCE_NORMALIZATION.md](./docs/SOURCE_NORMALIZATION.md)。
-## 日系繪本風樣式
+## 九種網站外觀／與上游相同的 Style Pack
 
-這個專案使用固定的**淺色**主題：和紙白 `#FFFCF6`、墨灰 `#3E3A39` 的 3px 卡片框線、珊瑚粉／山吹黃／水色／若竹綠平塗色塊，並使用 Google Fonts **Huninn**（網路不可用時自動回退到系統字體）。
+開啟 [Megan-trip 的「資訊 → 外觀」](https://world4jason.github.io/Megan-trip/#more) 即可立即切換，不必修改程式或網址。選項：
 
-- `storybook-theme.css`：最後載入的視覺覆蓋層，維持原本排版功能，無漸層與陰影。
-- `storybook-decor.js`：只標記已呈現的行程節點，讓 CSS 指派插圖；不修改行程資料、導航或清單儲存。
-- `assets/*.svg`：原創手繪風 SVG（石垣島灣景、燈塔、船潛小船、飛機、汽車、霜淇淋、蝠魟等）。
-- `app.js`：固定亮色並移除深色模式切換，避免使用者以前存的 dark mode 影響畫面。
-- `sw.js`：更新 PWA cache key，將新主題與 SVG 預載供離線使用。
+| 外觀 | 實際 Style Pack | 說明 |
+| --- | --- | --- |
+| Editorial Light | `editorial` + `light` | 原模板淺色編輯風 |
+| Editorial Dark | `editorial` + `dark` | 原模板深色編輯風 |
+| Storybook | `storybook` | **Megan 預設**：保留石垣島的海灣、燈塔、船、蝠魟與自駕插圖 |
+| Candy Geometry | `candy` | 五色柔和圓角貼紙 |
+| Paper Collage | `paper-collage` | 層疊紙雕與霧面卡紙陰影 |
+| Naive City Sketch | `naive-city` | 歐洲城市速寫、水粉與抖動墨線 |
+| Risograph Zine | `risograph` | 靛藍網點與復古印刷 |
+| Taiwan Retro Poster | `taiwan-poster` | 深海軍藍、赭黃、朱紅，幾何海報式構圖 |
+| Field Stamp | `field-stamp` | 手刻印章、乾墨破線與田野筆記 |
 
-```bash
-npm ci
-npm run test:storybook
-```
+**切換只存在此裝置**。同行者不會受到影響；按「跟隨行程預設」即可恢復 Megan 的 Storybook。分享連結的 `?previewStyle=...` 是暫時預覽；你在設定頁選擇後會移除預覽參數，仍保留目前所看的日期／頁面。
 
-樣式更新不會更動 `trip.json`、原有預約資料、清單勾選或本機備註內容。
+### 與 Travel-lite-Template 的一致性
+
+`app.js`、`trip-view.js`、`theme-shell.js`、七種共享風格 CSS 與 SVG 素材均來自同一版本的 [Travel-lite-Template](https://github.com/world4jason/Travel-lite-Template)。這份 Megan-trip 的 `trip.json` 與 PWA 名稱仍是原本的石垣島五天行程；除非更動行程來源，所有航班、租車、船潛、Google Maps 導航與 39 項清單資料均不會因切換風格而修改。
+
+`megan-local.css` **僅在 Storybook 模式**保留石垣島專屬插圖，其餘 Style Pack 使用與原模板同檔案的 CSS/SVG（以 SHA-256 與瀏覽器 computed styles 驗收）。通用插圖只代表旅遊視覺語言，不代表從真實照片重建任何日本或台灣地標。
+
+兩個 Pages 在同一個 `world4jason.github.io` origin，`sw.js` 使用依專案 scope 區分的快取命名，避免更新一邊時清除另一邊的離線快取。
+
+- [Megan-trip：九種外觀](https://world4jason.github.io/Megan-trip/#more)
+- [Travel-lite-Template：九種外觀](https://world4jason.github.io/Travel-lite-Template/#more)
+- [四套新風格的實際截圖](./style-packs/README.md)
+- [下一個自然語言提示詞的 E2E 驗收流程](./style-generator/NEXT_PROMPT_E2E.md)
 
 ## 每日時間軸、重點標籤與動態效果
 
@@ -97,8 +111,11 @@ npm run test:storybook
 驗證：
 
 ```bash
-npm ci
+npm install
 npm run test:trip
-npm run test:storybook
-npm run test:mobile
+npm run test:site
+npm run test:megan-styles
+# 同時有 Travel-lite-Template 及 Megan-trip 本機副本時：
+# 在 Travel-lite-Template 目錄
+MEGAN_LOCAL_REPO=../Megan-trip npm run test:style-parity
 ```

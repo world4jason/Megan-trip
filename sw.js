@@ -1,5 +1,10 @@
-const CACHE = "megan-trip-storybook-timeline-v3";
-const RUNTIME_CACHE = "travel-lite-runtime-v1";
+// Both Travel-lite-Template and Megan-trip live on the same github.io origin.
+// Prefix CacheStorage with the SW scope: each project keeps its own offline
+// shell/runtime, and activating one cannot delete the other's cache.
+const CACHE_PREFIX = "travel-lite:" + new URL(self.registration.scope).pathname
+  .replace(/[^a-z0-9]/gi, "-") + ":";
+const CACHE = CACHE_PREFIX + "shell-v29-nine-looks";
+const RUNTIME_CACHE = CACHE_PREFIX + "runtime-v1";
 const scopeUrl = (path) => new URL(path, self.registration.scope).href;
 const INDEX = scopeUrl("./index.html");
 const CORE = [
@@ -13,7 +18,15 @@ const CORE = [
   "./companion-ux.css",
   "./long-trip-nav.css",
   "./today-brief.css",
+  "./style-settings.css",
+  "./megan-local.css",
   "./storybook-theme.css",
+  "./candy-theme.css",
+  "./risograph-theme.css",
+  "./paper-collage-theme.css",
+  "./naive-city-theme.css",
+  "./taiwan-poster-theme.css",
+  "./field-stamp-theme.css",
   "./bootstrap.js",
   "./storage.js",
   "./app.js",
@@ -22,6 +35,7 @@ const CORE = [
   "./runtime-features.js",
   "./runtime-handoff.js",
   "./runtime-google.js",
+  "./theme-shell.js",
   "./responsive-shell.js",
   "./companion-ux.js",
   "./timezone.js",
@@ -29,16 +43,51 @@ const CORE = [
   "./today-brief.js",
   "./storybook-motion.js",
   "./storybook-decor.js",
+  "./trip.json",
   "./assets/ishigaki-scene.svg",
-  "./assets/plane.svg",
   "./assets/car.svg",
+  "./assets/plane.svg",
   "./assets/boat.svg",
   "./assets/icecream.svg",
   "./assets/lighthouse.svg",
   "./assets/manta.svg",
-  "./assets/hotel.svg",
-  "./assets/bay.svg",
-  "./trip.json",
+  "./assets/storybook/hero.svg",
+  "./assets/storybook/map.svg",
+  "./assets/storybook/city.svg",
+  "./assets/storybook/plane.svg",
+  "./assets/storybook/car.svg",
+  "./assets/storybook/train.svg",
+  "./assets/storybook/boat.svg",
+  "./assets/storybook/food.svg",
+  "./assets/storybook/hotel.svg",
+  "./assets/storybook/landmark.svg",
+  "./assets/storybook/nature.svg",
+  "./assets/storybook/sea.svg",
+  "./assets/candy/boat.svg",
+  "./assets/candy/car.svg",
+  "./assets/candy/city.svg",
+  "./assets/candy/food.svg",
+  "./assets/candy/hero.svg",
+  "./assets/candy/hotel.svg",
+  "./assets/candy/landmark.svg",
+  "./assets/candy/map.svg",
+  "./assets/candy/nature.svg",
+  "./assets/candy/plane.svg",
+  "./assets/candy/sea.svg",
+  "./assets/candy/train.svg",
+  "./assets/risograph/grain.svg",
+  "./assets/risograph/hero.svg",
+  "./assets/risograph/marker.svg",
+  "./assets/paper-collage/hero.svg",
+  "./assets/paper-collage/marker.svg",
+  "./assets/paper-collage/street.svg",
+  "./assets/naive-city/hero.svg",
+  "./assets/naive-city/marker.svg",
+  "./assets/taiwan-poster/hero.svg",
+  "./assets/taiwan-poster/marker.svg",
+  "./assets/field-stamp/hero.svg",
+  "./assets/field-stamp/marker.svg",
+
   "./manifest.webmanifest",
   "./icon.svg"
 ].map(scopeUrl);
@@ -49,7 +98,8 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", (event) => {
   const keep = new Set([CACHE, RUNTIME_CACHE]);
-  event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((key) => !keep.has(key)).map((key) => caches.delete(key)))).then(() => self.clients.claim()));
+  event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((key) => key.startsWith(CACHE_PREFIX) && !keep.has(key))
+    .map((key) => caches.delete(key)))).then(() => self.clients.claim()));
 });
 
 async function trimCache(cacheName, maxEntries = 180) {

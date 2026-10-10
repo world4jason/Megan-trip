@@ -7,6 +7,9 @@ const state = {
   todos: {},
   personalNote: "",
   theme: "system",
+  visualStyle: "editorial",
+  stylePreference: null, // per-trip and device-only
+  styleSource: "trip",
 };
 
 const VIEW_META = {
@@ -19,6 +22,102 @@ const VIEW_META = {
 
 const root = document.querySelector("#view-root");
 const bottomNav = document.querySelector("#bottom-nav");
+
+// The trip publishes a shared default. Each viewer can override it with a
+// whitelisted device-only style preference. A URL preview takes precedence for
+// the current link only; none of these operations edits shared trip data.
+const VISUAL_PACKS = Object.freeze({
+  editorial: { css: [], lightOnly: false, timeline: false, motion: false },
+  storybook: { css: ["storybook-style"], lightOnly: true, timeline: true, motion: true },
+  candy: { css: ["storybook-style", "candy-style"], lightOnly: true, timeline: true, motion: true },
+  risograph: { css: ["risograph-style"], lightOnly: true, timeline: true, motion: false },
+  "paper-collage": { css: ["storybook-style", "paper-collage-style"], lightOnly: true, timeline: true, motion: true },
+  "naive-city": { css: ["storybook-style", "naive-city-style"], lightOnly: true, timeline: true, motion: true },
+  "taiwan-poster": { css: ["storybook-style", "taiwan-poster-style"], lightOnly: true, timeline: true, motion: false },
+  "field-stamp": { css: ["storybook-style", "field-stamp-style"], lightOnly: true, timeline: true, motion: false },
+});
+const VISUAL_STYLES = new Set(Object.keys(VISUAL_PACKS));
+const isStorybook = () => state.visualStyle === "storybook";
+const isIllustratedStyle = () => VISUAL_PACKS[state.visualStyle]?.timeline === true;
+const isFixedLightStyle = () => VISUAL_PACKS[state.visualStyle]?.lightOnly === true;
+const hasIllustrationMotion = () => VISUAL_PACKS[state.visualStyle]?.motion === true;
+const packThemeColor = () => ({ storybook: "#FFFCF6", candy: "#FFF9EF",
+  risograph: "#F7F1E4", "paper-collage": "#FAF3E4", "naive-city": "#FAF5E9",
+  "taiwan-poster": "#F5E7C4", "field-stamp": "#F7F0E3" })[state.visualStyle] || "#f5f6f2";
+
+function activateVisualStyle() {
+  let requested = "";
+  try { requested = new URLSearchParams(window.location.search).get("previewStyle") || ""; } catch {}
+  const fromTrip = VISUAL_STYLES.has(state.data?.ui?.visualStyle)
+    ? state.data.ui.visualStyle : "editorial";
+  const isPreview = VISUAL_STYLES.has(requested);
+  state.visualStyle = isPreview ? requested : (state.stylePreference || fromTrip);
+  state.styleSource = isPreview ? "preview" : state.stylePreference ? "device" : "trip";
+  document.documentElement.dataset.visualStyle = state.visualStyle;
+
+  // Only audited, bundled pack IDs may activate stylesheets. No arbitrary
+  // prompt text, URL or style manifest gets interpreted as CSS or JavaScript.
+  const pack = VISUAL_PACKS[state.visualStyle];
+  for (const id of ["storybook-style", "candy-style", "risograph-style",
+    "paper-collage-style", "naive-city-style", "taiwan-poster-style", "field-stamp-style"]) {
+    const sheet = document.getElementById(id);
+    if (sheet) sheet.disabled = !pack.css.includes(id);
+  }
+
+  if (["storybook", "candy", "naive-city"].includes(state.visualStyle)) {
+    // Only styles that actually use Huninn request it; retro print and paper
+    // styles retain their specified editorial/print fonts without network font requests.
+    if (!document.querySelector("#storybook-font")) {
+      const font = document.createElement("link");
+      font.id = "storybook-font";
+      font.rel = "stylesheet";
+      font.href = "https://fonts.googleapis.com/css2?family=Huninn&display=swap";
+      font.media = "print";
+      font.onload = () => { font.media = "all"; };
+      document.head.appendChild(font);
+    }
+  }
+  if (hasIllustrationMotion()) window.TravelLiteStorybookMotion?.init(state.data.trip.id);
+}
+
+// Choosing in Settings removes only the appearance-preview parameter; it keeps
+// the route/hash and any unrelated parameters. The shared itinerary is untouched.
+function clearStylePreviewQuery() {
+  const url = new URL(window.location.href);
+  if (!url.searchParams.has("previewStyle")) return;
+  url.searchParams.delete("previewStyle");
+  history.replaceState(history.state, "", url.pathname + url.search + url.hash);
+}
+
+async function chooseLocalStyle(choice) {
+  const editorialChoice = choice === "editorial-light" || choice === "editorial-dark";
+  if (choice !== "default" && !VISUAL_STYLES.has(choice) && !editorialChoice) return false;
+  const next = choice === "default" ? null : editorialChoice ? "editorial" : choice;
+  if (editorialChoice) {
+    state.theme = choice === "editorial-dark" ? "dark" : "light";
+    await TravelLiteStorage.set(tripKey("theme"), state.theme);
+  } else if (choice === "default") {
+    await TravelLiteStorage.remove(tripKey("theme"));
+    state.theme = state.data.ui.theme || "system";
+  }
+  if (next === null) {
+    await TravelLiteStorage.remove(tripKey("visualStyle"));
+  } else {
+    const stored = await TravelLiteStorage.set(tripKey("visualStyle"), next);
+    if (stored === false) return false;
+  }
+  state.stylePreference = next;
+  clearStylePreviewQuery();
+  activateVisualStyle();
+  applyTheme();
+  // Changing between fixed-light packs may not change data-theme, so refresh
+  // the shell explicitly as well as rerendering the active settings view.
+  window.dispatchEvent(new Event("travel-lite-style-changed"));
+  renderMore();
+  root.querySelector(next === null ? "[data-style-reset]" :
+    '[data-style-choice="' + choice + '"]')?.focus({ preventScroll: true });
+  return true;
+}
 
 const escapeHtml = (value = "") => String(value)
   .replaceAll("&", "&amp;")
@@ -125,6 +224,7 @@ function normalizeData(raw) {
   data.journal ||= [];
   data.links ||= [];
   data.ui ||= {};
+  data.ui.visualStyle = VISUAL_STYLES.has(data.ui.visualStyle) ? data.ui.visualStyle : "editorial";
   data.ui.bottomNav ||= ["now", "trip", "map", "check", "more"];
   data.days.forEach((day, dayIndex) => {
     day.id ||= `day-${dayIndex + 1}`;
@@ -258,7 +358,7 @@ function renderNow() {
     return;
   }
   if (context.phase === "after") {
-    root.innerHTML = `<section class="panel empty-state"><p class="eyebrow">行程已結束</p><h2>${escapeHtml(state.data.trip.title)}</h2><p>仍可透過「行程」查看每一天的安排。</p></section>`;
+    root.innerHTML = `<section class="panel empty-state"><p class="eyebrow">Trip complete</p><h2>${escapeHtml(state.data.trip.title)}</h2><p>The itinerary remains available as a compact trip record.</p></section>`;
     return;
   }
   const current = context.current;
@@ -315,7 +415,7 @@ function renderMap() {
   state.selectedMapItemId = selected?.id || null;
   const placeChips = items.map((item) => `<button class="place-chip ${item.id === state.selectedMapItemId ? "active" : ""}" type="button" data-map-place="${escapeAttr(item.id)}"><span>${escapeHtml(item.start || "")}</span>${escapeHtml(item.title)}</button>`).join("");
   root.innerHTML = `<div class="day-tabs" aria-label="Map days">${dayTabs}</div><section class="panel map-panel">
-    <div class="map-heading"><div><p class="eyebrow">Google Maps</p><h2>${escapeHtml(selectedDay?.title || "Trip map")}</h2></div>${selected ? `<a class="button-link" href="${escapeAttr(googleMapsOpenUrl(selected))}" target="_blank" rel="noreferrer">開啟 ↗</a>` : ""}</div>
+    <div class="map-heading"><div><p class="eyebrow">Google Maps</p><h2>${escapeHtml(selectedDay?.title || "Trip map")}</h2></div>${selected ? `<a class="button-link" href="${escapeAttr(googleMapsOpenUrl(selected))}" target="_blank" rel="noreferrer">Open ↗</a>` : ""}</div>
     ${items.length ? `<div class="place-chips">${placeChips}</div>${mapPreview(selected)}` : `<div class="empty-state"><p>No mappable locations for this day.</p></div>`}
   </section>`;
   root.querySelectorAll("[data-map-date]").forEach((button) => button.addEventListener("click", () => {
@@ -348,12 +448,12 @@ function renderCheck() {
   root.querySelectorAll("[data-check-key]").forEach((input) => input.addEventListener("change", async () => {
     state.checks[input.dataset.checkKey] = input.checked;
     await TravelLiteStorage.set(tripKey("checks"), state.checks);
-    renderCheck();
+    if (state.view === "check") renderCheck();
   }));
   root.querySelectorAll("[data-todo-key]").forEach((input) => input.addEventListener("change", async () => {
     state.todos[input.dataset.todoKey] = input.checked;
     await TravelLiteStorage.set(tripKey("todos"), state.todos);
-    renderCheck();
+    if (state.view === "check") renderCheck();
   }));
 }
 
@@ -369,36 +469,105 @@ function detailsSection(title, count, body, open = false) {
 }
 
 function renderMore() {
-  const reservations = state.data.reservations.map((item) => `<article class="info-row"><div><span class="type-pill">${escapeHtml(item.type || "booking")}</span><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml([item.date ? prettyDate(item.date) : "", item.time || "", item.location || ""].filter(Boolean).join(" · "))}</p>${item.status ? `<small>${escapeHtml(item.status)}</small>` : ""}</div>${item.url ? `<a class="inline-link" href="${escapeAttr(item.url)}" target="_blank" rel="noreferrer">開啟 ↗</a>` : ""}</article>`).join("");
+  const moreZh = /^zh/i.test(state.data.ui.locale || "");
+  const labelMore = (english, chinese) => moreZh ? chinese : english;
+  const reservations = state.data.reservations.map((item) => `<article class="info-row"><div><span class="type-pill">${escapeHtml(item.type || "booking")}</span><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml([item.date ? prettyDate(item.date) : "", item.time || "", item.location || ""].filter(Boolean).join(" · "))}</p>${item.status ? `<small>${escapeHtml(item.status)}</small>` : ""}</div>${item.url ? `<a class="inline-link" href="${escapeAttr(item.url)}" target="_blank" rel="noreferrer">Open ↗</a>` : ""}</article>`).join("");
   const total = state.data.costs.entries.reduce((sum, item) => sum + Number(item.amount || 0), 0);
-  const costs = `<div class="cost-total"><span>合計</span><strong>${money(total, state.data.costs.currency)}</strong></div>${state.data.costs.entries.map((item) => `<article class="info-row compact-row"><div><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.category || "")}${item.date ? ` · ${prettyDate(item.date)}` : ""}</p></div><strong>${money(item.amount, item.currency || state.data.costs.currency)}</strong></article>`).join("")}`;
+  const costs = `<div class="cost-total"><span>Total</span><strong>${money(total, state.data.costs.currency)}</strong></div>${state.data.costs.entries.map((item) => `<article class="info-row compact-row"><div><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.category || "")}${item.date ? ` · ${prettyDate(item.date)}` : ""}</p></div><strong>${money(item.amount, item.currency || state.data.costs.currency)}</strong></article>`).join("")}`;
   const notes = state.data.notes.map((note) => `<article class="text-card"><h3>${escapeHtml(note.title)}</h3><p>${escapeHtml(note.body)}</p></article>`).join("");
   const files = state.data.files.map((file) => `<a class="file-row" href="${escapeAttr(file.url)}" target="_blank" rel="noreferrer"><span><strong>${escapeHtml(file.title)}</strong><small>${escapeHtml(file.type || "file")}</small></span><span>↗</span></a>`).join("");
   const contacts = state.data.contacts.map((contact) => `<article class="info-row compact-row"><div><h3>${escapeHtml(contact.name)}</h3><p>${escapeHtml(contact.role || "")}</p></div>${contact.phone ? `<a class="inline-link" href="tel:${escapeAttr(contact.phone)}">${escapeHtml(contact.phone)}</a>` : ""}</article>`).join("");
   const journal = state.data.journal.map((entry) => `<article class="text-card"><p class="eyebrow">${escapeHtml(entry.date ? prettyDate(entry.date, { weekday: "short" }) : entry.mood || "Journal")}</p><h3>${escapeHtml(entry.title)}</h3><p>${escapeHtml(entry.body)}</p></article>`).join("");
   const links = state.data.links.map((link) => `<a class="file-row" href="${escapeAttr(link.url)}" target="_blank" rel="noreferrer"><span><strong>${escapeHtml(link.label)}</strong></span><span>↗</span></a>`).join("");
+  const names = {
+    "editorial-light": "Editorial Light", "editorial-dark": "Editorial Dark",
+    storybook: "Storybook", candy: "Candy Geometry",
+    "paper-collage": "Paper Collage", "naive-city": "Naive City Sketch",
+    risograph: "Risograph Zine", "taiwan-poster": "Taiwan Retro Poster",
+    "field-stamp": "Field Stamp",
+  };
+  const choices = [
+    "editorial-light", "editorial-dark", "storybook", "candy", "paper-collage",
+    "naive-city", "risograph", "taiwan-poster", "field-stamp",
+  ];
+  const isZh = /^zh/i.test(state.data.ui.locale || "");
+  const descriptions = {
+    "editorial-light": isZh ? "經典編輯 · 淺色" : "Classic · light",
+    "editorial-dark": isZh ? "經典編輯 · 深色" : "Classic · dark",
+    storybook: isZh ? "日系繪本 · 插畫" : "Picture book · illustrated",
+    candy: isZh ? "糖果色塊 · 圓潤" : "Pastel · rounded stickers",
+    "paper-collage": isZh ? "層疊剪紙 · 紙雕" : "Layered cutout · cardstock",
+    "naive-city": isZh ? "歐洲手繪 · 水粉" : "Hand-drawn · gouache",
+    risograph: isZh ? "孔版印刷 · 復古" : "Print · indigo grain",
+    "taiwan-poster": isZh ? "台灣海報 · 網印" : "Retro poster · screenprint",
+    "field-stamp": isZh ? "田野印章 · 手刻" : "Field notes · carved stamp",
+  };
+  const defaultStyle = VISUAL_STYLES.has(state.data.ui.visualStyle)
+    ? state.data.ui.visualStyle : "editorial";
+  const defaultAppearance = defaultStyle === "editorial"
+    ? (state.data.ui.theme === "dark" ? "editorial-dark" : "editorial-light")
+    : defaultStyle;
+  const selectedChoice = state.visualStyle === "editorial"
+    ? ((state.theme === "dark" || (state.theme === "system" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches))
+      ? "editorial-dark" : "editorial-light")
+    : state.visualStyle;
+  const optionMarkup = choices.map(id => `<button type="button"
+    class="style-option" data-style-choice="${id}" aria-pressed="${selectedChoice === id}">
+      <span class="style-preview style-preview--${id}" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </span>
+      <strong>${names[id]}</strong><small>${descriptions[id]}</small>
+    </button>`).join("");
+  const origin = state.styleSource === "preview"
+    ? (isZh ? "目前為連結預覽；點選風格可保存在本裝置。" :
+        "Previewing a link. Choose a style to save it on this device.")
+    : state.styleSource === "device"
+      ? (isZh ? "已儲存在此裝置，不影響同行者。" :
+          "Saved on this device; other travellers are unaffected.")
+      : (isZh ? "目前使用共用行程的預設風格。" :
+          "Following the published trip's default.");
+  const styleChooser = `<section class="panel settings-card style-settings">
+    <div><p class="eyebrow">Appearance / 外觀</p>
+      <h2>${isZh ? "切換網站風格" : "Choose a visual style"}</h2>
+      <p class="helper-text">${isZh ? "立即切換，僅記錄在這台裝置。" :
+        "Switch instantly. Your choice stays on this device."}</p>
+    </div>
+    <div class="style-options" role="group"
+      aria-label="${isZh ? "九種可選網站外觀" : "Nine available appearances"}">${optionMarkup}</div>
+    <div class="style-settings-footer">
+      <button class="style-reset-button" type="button" data-style-reset
+        aria-pressed="${state.styleSource === "trip"}">
+        ${isZh ? "跟隨行程預設" : "Follow trip default"} · ${names[defaultAppearance]}
+      </button>
+      <p class="helper-text style-source" role="status">${origin}</p>
+    </div>
+  </section>`;
+  const appearance = isFixedLightStyle()
+    ? `<section class="panel settings-card">
+        <div><p class="eyebrow">Appearance</p><h2>${names[state.visualStyle]} · Light only</h2></div>
+        ${hasIllustrationMotion() ? `<p class="helper-text">Gentle illustration animation respects your device accessibility settings.</p>
+        <div class="motion-preference">
+          <h3>Motion / 動態效果</h3>
+          <div class="motion-options" role="group" aria-label="Motion preference">
+            ${[["system", "Follow device · 跟隨裝置"], ["reduce", "Reduce motion · 減少動畫"]]
+              .map(([mode, label]) => `<button type="button" class="motion-choice" data-motion-choice="${mode}" aria-pressed="${window.TravelLiteStorybookMotion?.get() === mode}">${label}</button>`).join("")}
+          </div>
+        </div>` : `<p class="helper-text">Static print-inspired design. No illustration animations.</p>`}
+        <div class="storage-status"><span>Local storage</span><strong id="storage-mode">${escapeHtml(TravelLiteStorage.getMode())}</strong></div>
+      </section>`
+    : `<section class="panel settings-card"><div><p class="eyebrow">Appearance</p><h2>Theme</h2></div><div class="theme-switcher">${["system", "dark", "light"].map((theme) => `<button type="button" data-theme="${theme}" class="theme-button ${state.theme === theme ? "active" : ""}">${theme}</button>`).join("")}</div><div class="storage-status"><span>Local storage</span><strong id="storage-mode">${escapeHtml(TravelLiteStorage.getMode())}</strong></div></section>`;
   root.innerHTML = `<div class="view-stack">
-    <section class="panel local-note-card"><div class="check-title-row"><h2>我的私人備註</h2><span>僅此裝置</span></div><textarea id="personal-note" rows="4" placeholder="登機門、房號、臨時備註…">${escapeHtml(state.personalNote)}</textarea><p class="helper-text">資料只儲存在本裝置，不會同步給同行者。</p></section>
-    <section class="panel settings-card">
-      <div><p class="eyebrow">裝置</p><h2>動態效果與本機資料</h2></div>
-      <p class="helper-text">本站固定以淺色繪本風呈現。</p>
-      <div class="motion-preference">
-        <div><h3>動態效果</h3><p>跟隨手機或電腦的「減少動態效果」設定，也可在本站關閉動畫。</p></div>
-        <div class="motion-options" role="group" aria-label="動態效果設定">
-          ${[["system", "跟隨裝置"], ["reduce", "減少動畫"]].map(([value, label]) =>
-            `<button class="motion-choice" type="button" data-motion-choice="${value}" aria-pressed="${(window.MeganMotion?.get() || "system") === value}">${label}</button>`).join("")}
-        </div>
-      </div>
-      <div class="storage-status"><span>本機儲存</span><strong id="storage-mode">${escapeHtml(TravelLiteStorage.getMode())}</strong></div>
-    </section>
-    ${detailsSection("預約與票券", state.data.reservations.length, reservations, true)}
-    ${detailsSection("費用", state.data.costs.entries.length, costs)}
-    ${detailsSection("旅程備註", state.data.notes.length, notes)}
-    ${detailsSection("文件與票券", state.data.files.length, files)}
-    ${detailsSection("聯絡資訊", state.data.contacts.length, contacts)}
-    ${detailsSection("Journal", state.data.journal.length, journal)}
-    ${detailsSection("實用連結", state.data.links.length, links)}
-
+    ${styleChooser}
+    <section class="panel local-note-card"><div class="check-title-row"><h2>Personal note</h2><span>this device</span></div><textarea id="personal-note" rows="4" placeholder="Gate change, room number, quick memo…">${escapeHtml(state.personalNote)}</textarea><p class="helper-text">Saved locally in IndexedDB; falls back to localStorage if needed.</p></section>
+    ${detailsSection(labelMore("Reservations", "預約與票券"), state.data.reservations.length, reservations, true)}
+    ${detailsSection(labelMore("Costs", "費用"), state.data.costs.entries.length, costs)}
+    ${detailsSection(labelMore("Trip notes", "旅程備註"), state.data.notes.length, notes)}
+    ${detailsSection(labelMore("Files & tickets", "文件與票券"), state.data.files.length, files)}
+    ${detailsSection(labelMore("Contacts", "聯絡資訊"), state.data.contacts.length, contacts)}
+    ${detailsSection(labelMore("Journal", "旅程日記"), state.data.journal.length, journal)}
+    ${detailsSection(labelMore("Links", "實用連結"), state.data.links.length, links)}
+    ${appearance}
   </div>`;
   const textarea = root.querySelector("#personal-note");
   let noteTimer;
@@ -407,20 +576,36 @@ function renderMore() {
     clearTimeout(noteTimer);
     noteTimer = setTimeout(() => TravelLiteStorage.set(tripKey("personalNote"), state.personalNote), 180);
   });
-  root.querySelectorAll("[data-motion-choice]").forEach((button) => {
-    button.addEventListener("click", () => {
-      if (!window.MeganMotion?.set(button.dataset.motionChoice)) return;
-      root.querySelectorAll("[data-motion-choice]").forEach((choice) => {
-        choice.setAttribute("aria-pressed", String(choice.dataset.motionChoice === window.MeganMotion.get()));
-      });
-    });
+  root.querySelectorAll("[data-style-choice]").forEach(button => button.addEventListener("click", async () => {
+    button.disabled = true;
+    try { await chooseLocalStyle(button.dataset.styleChoice); }
+    finally { button.disabled = false; }
+  }));
+  root.querySelector("[data-style-reset]")?.addEventListener("click", async (event) => {
+    // Event.currentTarget is cleared after the first await. Capture the
+    // button synchronously; the selector's original node may be re-rendered.
+    const button = event.currentTarget;
+    button.disabled = true;
+    try { await chooseLocalStyle("default"); }
+    finally { button.disabled = false; }
   });
+  root.querySelectorAll("[data-theme]").forEach((button) => button.addEventListener("click", async () => {
+    state.theme = button.dataset.theme;
+    applyTheme();
+    await TravelLiteStorage.set(tripKey("theme"), state.theme);
+    renderMore();
+  }));
+  root.querySelectorAll("[data-motion-choice]").forEach((button) => button.addEventListener("click", () => {
+    if (!window.TravelLiteStorybookMotion?.set(button.dataset.motionChoice)) return;
+    root.querySelectorAll("[data-motion-choice]").forEach((choice) =>
+      choice.setAttribute("aria-pressed", String(choice.dataset.motionChoice === window.TravelLiteStorybookMotion.get())));
+  }));
 }
 
 function applyTheme() {
-  state.theme = "light";
-  document.documentElement.dataset.theme = "light";
-  document.documentElement.style.colorScheme = "light";
+  const mode = isFixedLightStyle() ? "light" : state.theme;
+  document.documentElement.dataset.theme = mode;
+  document.documentElement.style.colorScheme = mode === "system" ? "light dark" : mode;
 }
 
 function render() {
@@ -464,9 +649,9 @@ function hydrateTripCover(trip) {
 
 function hydrateHeader() {
   const { trip } = state.data;
-  document.title = `${trip.title} · 石垣島繪本行程`;
+  document.title = `${trip.title} · Travel Lite`;
   document.documentElement.style.setProperty("--accent", trip.accent);
-  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#FFFCF6");
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", isFixedLightStyle() ? packThemeColor() : (trip.themeColor || "#0b1020"));
   document.querySelector("#trip-location").textContent = trip.homeLabel || "Travel Lite";
   document.querySelector("#trip-title").textContent = trip.title;
   document.querySelector("#trip-meta").textContent = `${trip.subtitle || ""}${trip.subtitle ? " · " : ""}${dateRangeLabel(trip)}`;
@@ -499,7 +684,7 @@ async function hydrateLocalState() {
   state.checks = (await TravelLiteStorage.get(tripKey("checks"))) || {};
   state.todos = (await TravelLiteStorage.get(tripKey("todos"))) || {};
   state.personalNote = (await TravelLiteStorage.get(tripKey("personalNote"))) || "";
-  state.theme = "light"; // This site intentionally uses one paper-light visual style.
+  state.theme = (await TravelLiteStorage.get(tripKey("theme"))) || state.data.ui.theme || "system";
 
   try {
     const legacyKey = `travel-lite:${state.data.trip.id}:checks`;
@@ -522,6 +707,9 @@ async function registerServiceWorker() {
 async function boot() {
   try {
     state.data = await loadTripData();
+    const storedStyle = await TravelLiteStorage.get(tripKey("visualStyle"));
+    state.stylePreference = VISUAL_STYLES.has(storedStyle) ? storedStyle : null;
+    activateVisualStyle();
     await hydrateLocalState();
     hydrateHeader();
     updateClock();
