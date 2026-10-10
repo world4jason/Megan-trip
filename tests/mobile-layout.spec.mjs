@@ -472,7 +472,8 @@ for (const viewport of FULL_MATRIX) {
   });
 }
 
-for (const theme of ["light", "dark"]) {
+// Megan-trip is intentionally light-only; dark/system variants are not published.
+for (const theme of ["light"]) {
   for (const viewport of MOBILE_VIEWPORTS) {
     test(`${theme} theme reflows at ${viewport.width}x${viewport.height}`, async ({ page }) => {
       await boot(page, viewport);
@@ -574,7 +575,7 @@ test("trip-day deep link is applied even when trip.json takes longer than 5s", a
 
 test("enhancement layers initialise on travel-lite-ready, not by polling", () => {
   // Guards the contract in docs/ARCHITECTURE.md: a timed poll can give up before a slow trip.json arrives.
-  for (const file of ["companion-ux.js", "responsive-shell.js", "theme-shell.js", "long-trip-nav.js"]) {
+  for (const file of ["companion-ux.js", "responsive-shell.js", "storybook-decor.js", "long-trip-nav.js"]) {
     const source = readFileSync(resolve(REPO_ROOT, file), "utf8");
     expect(source, `${file} must initialise on travel-lite-ready`).toContain('"travel-lite-ready"');
     expect(source, `${file} must not poll for trip data`).not.toMatch(/setInterval\s*\(/);
@@ -599,7 +600,7 @@ test("enhancement layers initialise when trip.json takes longer than 5s", async 
   await expect(page.locator('.shell-context-right [data-shell-context-slot="primary"]')).not.toBeEmpty();
   await expect(page.locator(".shell-context-right")).toBeVisible();
 
-  // Dark system theme: Map uses the dark style (theme-shell.js syncMapStyle).
+  // Light-only site must keep the light map even if the device prefers dark.
   await page.emulateMedia({ colorScheme: "dark" });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
@@ -608,7 +609,7 @@ test("enhancement layers initialise when trip.json takes longer than 5s", async 
   await expect(page.locator(`[data-trip-day="${TODAY}"].active`)).toHaveCount(1);
   const styleRequest = page.waitForRequest((request) => request.url().startsWith(`${MAP_STYLE_HOST}styles/`));
   await openView(page, "map");
-  expect((await styleRequest).url()).toBe(`${MAP_STYLE_HOST}styles/dark`);
+  expect((await styleRequest).url()).toBe(`${MAP_STYLE_HOST}styles/liberty`);
 });
 
 test("Map opened on first load initialises MapLibre exactly once", async ({ page }) => {
@@ -775,9 +776,10 @@ async function bootIdentityTrip(page, identity = {}, { coverStatus = 200 } = {})
   await page.waitForFunction(() => typeof state !== "undefined" && state.ready === true);
 }
 
-test("trip identity accepts a contrast-safe accent and rejects unsafe accent colors", async ({ page }) => {
+test("storybook palette stays ink-dark while trip accent input is normalized safely", async ({ page }) => {
   await bootIdentityTrip(page, { accent: "#1f5f4a" });
-  await expect.poll(() => page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--accent").trim())).toBe("#1f5f4a");
+  await expect.poll(() => page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--accent").trim())).toBe("#3E3A39");
+  await expect.poll(() => page.evaluate(() => state.data.trip.accent)).toBe("#1f5f4a");
 
   expect(await page.evaluate(() => normalizeAccent("#ffffff"))).toBe("#4f6f5e");
   expect(await page.evaluate(() => normalizeAccent("red"))).toBe("#4f6f5e");

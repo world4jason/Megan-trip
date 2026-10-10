@@ -1,1 +1,9 @@
-²ø1šYì
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="çŸ³åž£å³¶æµ·ç£åœ–ç¤º">
+  <rect x="6" y="6" width="500" height="500" rx="110" fill="#FFFCF6" stroke="#3E3A39" stroke-width="12"/>
+  <circle cx="370" cy="136" r="47" fill="#F6D27A" stroke="#3E3A39" stroke-width="12"/>
+  <path d="M12 325Q91 220 166 275Q251 161 326 259Q408 192 500 292V500H12Z" fill="#B9DAA5" stroke="#3E3A39" stroke-width="12"/>
+  <path d="M12 356Q118 326 221 356T500 346V500H12Z" fill="#A8D3E6" stroke="#3E3A39" stroke-width="12"/>
+  <path d="M138 353l19-110h45l20 110Z" fill="#FFFCF6" stroke="#3E3A39" stroke-width="12"/>
+  <path d="M148 241h64v37h-64Z" fill="#F2A497" stroke="#3E3A39" stroke-width="12"/>
+  <path d="M70 426q50-22 102 0t104 0t105 0t83 0" fill="none" stroke="#FFFCF6" stroke-width="13" stroke-linecap="round"/>
+</svg>

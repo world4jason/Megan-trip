@@ -1,4 +1,4 @@
-const CACHE = "megan-trip-shell-v1";
+const CACHE = "megan-trip-storybook-v2";
 const RUNTIME_CACHE = "travel-lite-runtime-v1";
 const scopeUrl = (path) => new URL(path, self.registration.scope).href;
 const INDEX = scopeUrl("./index.html");
@@ -13,6 +13,7 @@ const CORE = [
   "./companion-ux.css",
   "./long-trip-nav.css",
   "./today-brief.css",
+  "./storybook-theme.css",
   "./bootstrap.js",
   "./storage.js",
   "./app.js",
@@ -21,12 +22,21 @@ const CORE = [
   "./runtime-features.js",
   "./runtime-handoff.js",
   "./runtime-google.js",
-  "./theme-shell.js",
   "./responsive-shell.js",
   "./companion-ux.js",
   "./timezone.js",
   "./long-trip-nav.js",
   "./today-brief.js",
+  "./storybook-decor.js",
+  "./assets/ishigaki-scene.svg",
+  "./assets/plane.svg",
+  "./assets/car.svg",
+  "./assets/boat.svg",
+  "./assets/icecream.svg",
+  "./assets/lighthouse.svg",
+  "./assets/manta.svg",
+  "./assets/hotel.svg",
+  "./assets/bay.svg",
   "./trip.json",
   "./manifest.webmanifest",
   "./icon.svg"

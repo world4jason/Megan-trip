@@ -6,7 +6,8 @@
     "test:mobile": "playwright test --project=chromium",
     "test:mobile:headed": "playwright test --project=chromium --headed",
     "test:trip": "node --test tests/trip-data.test.mjs",
-    "test:site": "node tests/megan-smoke.mjs"
+    "test:site": "node tests/megan-smoke.mjs",
+    "test:storybook": "node tests/storybook-smoke.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",

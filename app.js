@@ -386,7 +386,7 @@ function renderMore() {
     ${detailsSection("聯絡資訊", state.data.contacts.length, contacts)}
     ${detailsSection("Journal", state.data.journal.length, journal)}
     ${detailsSection("實用連結", state.data.links.length, links)}
-    <section class="panel settings-card"><div><p class="eyebrow">外觀</p><h2>顏色模式</h2></div><div class="theme-switcher">${["system", "dark", "light"].map((theme) => `<button type="button" data-theme="${theme}" class="theme-button ${state.theme === theme ? "active" : ""}">${({ system: "跟隨系統", dark: "深色", light: "淺色" })[theme]}</button>`).join("")}</div><div class="storage-status"><span>本機儲存</span><strong id="storage-mode">${escapeHtml(TravelLiteStorage.getMode())}</strong></div></section>
+    <section class="panel settings-card"><div><p class="eyebrow">裝置</p><h2>離線與本機資料</h2></div><p class="helper-text">本站固定以淺色繪本風呈現。</p><div class="storage-status"><span>本機儲存</span><strong id="storage-mode">${escapeHtml(TravelLiteStorage.getMode())}</strong></div></section>
   </div>`;
   const textarea = root.querySelector("#personal-note");
   let noteTimer;
@@ -395,17 +395,12 @@ function renderMore() {
     clearTimeout(noteTimer);
     noteTimer = setTimeout(() => TravelLiteStorage.set(tripKey("personalNote"), state.personalNote), 180);
   });
-  root.querySelectorAll("[data-theme]").forEach((button) => button.addEventListener("click", async () => {
-    state.theme = button.dataset.theme;
-    applyTheme();
-    await TravelLiteStorage.set(tripKey("theme"), state.theme);
-    renderMore();
-  }));
 }
 
 function applyTheme() {
-  document.documentElement.dataset.theme = state.theme;
-  document.documentElement.style.colorScheme = state.theme === "system" ? "light dark" : state.theme;
+  state.theme = "light";
+  document.documentElement.dataset.theme = "light";
+  document.documentElement.style.colorScheme = "light";
 }
 
 function render() {
@@ -449,9 +444,9 @@ function hydrateTripCover(trip) {
 
 function hydrateHeader() {
   const { trip } = state.data;
-  document.title = `${trip.title} · Travel Lite`;
+  document.title = `${trip.title} · 石垣島繪本行程`;
   document.documentElement.style.setProperty("--accent", trip.accent);
-  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", trip.themeColor || "#0b1020");
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#FFFCF6");
   document.querySelector("#trip-location").textContent = trip.homeLabel || "Travel Lite";
   document.querySelector("#trip-title").textContent = trip.title;
   document.querySelector("#trip-meta").textContent = `${trip.subtitle || ""}${trip.subtitle ? " · " : ""}${dateRangeLabel(trip)}`;
@@ -484,7 +479,7 @@ async function hydrateLocalState() {
   state.checks = (await TravelLiteStorage.get(tripKey("checks"))) || {};
   state.todos = (await TravelLiteStorage.get(tripKey("todos"))) || {};
   state.personalNote = (await TravelLiteStorage.get(tripKey("personalNote"))) || "";
-  state.theme = (await TravelLiteStorage.get(tripKey("theme"))) || state.data.ui.theme || "system";
+  state.theme = "light"; // This site intentionally uses one paper-light visual style.
 
   try {
     const legacyKey = `travel-lite:${state.data.trip.id}:checks`;

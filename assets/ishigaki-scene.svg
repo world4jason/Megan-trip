@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 365" role="img" aria-label="川平灣、燈塔與潛水船">
+<rect x="5" y="5" width="630" height="355" rx="35" fill="#FFFCF6" stroke="#3E3A39" stroke-width="7"/>
+<path d="M10 42Q10 10 42 10H598Q630 10 630 42V242H10Z" fill="#A8D3E6"/>
+<circle cx="491" cy="79" r="37" fill="#F6D27A" stroke="#3E3A39" stroke-width="5"/>
+<path d="M65 65q19-25 40 0q19-15 40 4M240 55q19-19 39-2q23-20 45-2" fill="none" stroke="#3E3A39" stroke-width="5" stroke-linecap="round"/>
+<path d="M10 214Q65 163 132 186Q181 111 239 155Q288 125 334 173Q379 152 411 186Q472 146 533 193Q583 164 630 182V258H10Z" fill="#B9DAA5" stroke="#3E3A39" stroke-width="5"/>
+<path d="M10 253Q100 233 191 253Q299 270 387 245Q507 216 630 251V323Q630 360 593 360H44Q10 360 10 323Z" fill="#A8D3E6" stroke="#3E3A39" stroke-width="5"/>
+<path d="M27 286q19-11 40 0t40 0m65 18q20-9 40 0t40 0m58-25q22-10 43 0t43 0m89 29q17-8 35 0t36 0" fill="none" stroke="#FFFCF6" stroke-width="7" stroke-linecap="round"/>
+<path d="M104 252l14-82h25l15 82Z" fill="#FFFCF6" stroke="#3E3A39" stroke-width="5"/>
+<path d="M118 174h25v23h-25Z" fill="#F2A497" stroke="#3E3A39" stroke-width="5"/>
+<path d="M113 160h36l-18-21Z" fill="#F6D27A" stroke="#3E3A39" stroke-width="5"/>
+<path d="M300 243l21 28h107l24-28Z" fill="#F2A497" stroke="#3E3A39" stroke-width="5"/>
+<path d="M317 216h107l4 27H311Z" fill="#FFFCF6" stroke="#3E3A39" stroke-width="5"/>
+<rect x="351" y="199" width="42" height="30" rx="8" fill="#F6D27A" stroke="#3E3A39" stroke-width="5"/>
+<path d="M373 199v-18m0 0l31 7l-31 7" fill="none" stroke="#3E3A39" stroke-width="5" stroke-linecap="round"/>
+<path d="M498 301q22-30 48-9q18 12 39-3q-6 25-31 28l-8 15l-8-15q-23-1-40-16Z" fill="#3E3A39"/>
+<circle cx="537" cy="299" r="3" fill="#FFFCF6"/><circle cx="546" cy="299" r="3" fill="#FFFCF6"/>
+</svg>

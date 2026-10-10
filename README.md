@@ -17,7 +17,7 @@
 | 清單 | 39 項裝備與行李清單、5 項行前核對，進度只存在當前裝置 |
 | 資訊 | 航班、租車、住宿、船潛、費用、聯絡資訊與備註 |
 
-支援繁體中文導覽、手機／桌機響應式佈局、亮暗主題、PWA/離線快取與可分享的行程深層連結。
+支援繁體中文導覽、手機／桌機響應式佈局、固定淺色繪本主題、PWA/離線快取與可分享的行程深層連結。
 
 **地圖限制：**原始文件除了住宿與船潛集合點的 Google Maps 分享連結之外，沒有提供經緯度，因此這版不會杜撰其他精確地點座標。地圖分頁仍保留每日地點清單與「Open in Maps」外開導航；互動地圖上的定位標記待日後核實座標後再補。
 
@@ -68,3 +68,19 @@ npm run test:mobile
 此專案沿用 `world4jason/Travel-lite-Template` 的 HTML/CSS/JS、資料模型、PWA、測試與相關文件。上游採用 **AGPL-3.0-or-later**，本 repo 保留原本的 [LICENSE](./LICENSE)、[NOTICE.md](./NOTICE.md) 與 [AGENTS.md](./AGENTS.md)。
 
 若要調整行程資料，請參考 [docs/TRIP_SCHEMA.md](./docs/TRIP_SCHEMA.md) 與 [docs/SOURCE_NORMALIZATION.md](./docs/SOURCE_NORMALIZATION.md)。
+## 日系繪本風樣式
+
+這個專案使用固定的**淺色**主題：和紙白 `#FFFCF6`、墨灰 `#3E3A39` 的 3px 卡片框線、珊瑚粉／山吹黃／水色／若竹綠平塗色塊，並使用 Google Fonts **Huninn**（網路不可用時自動回退到系統字體）。
+
+- `storybook-theme.css`：最後載入的視覺覆蓋層，維持原本排版功能，無漸層與陰影。
+- `storybook-decor.js`：只標記已呈現的行程節點，讓 CSS 指派插圖；不修改行程資料、導航或清單儲存。
+- `assets/*.svg`：原創手繪風 SVG（石垣島灣景、燈塔、船潛小船、飛機、汽車、霜淇淋、蝠魟等）。
+- `app.js`：固定亮色並移除深色模式切換，避免使用者以前存的 dark mode 影響畫面。
+- `sw.js`：更新 PWA cache key，將新主題與 SVG 預載供離線使用。
+
+```bash
+npm ci
+npm run test:storybook
+```
+
+樣式更新不會更動 `trip.json`、原有預約資料、清單勾選或本機備註內容。
