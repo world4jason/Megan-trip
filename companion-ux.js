@@ -202,7 +202,7 @@
       afterRender(); return;
     }
     if (context.phase === "after") {
-      root.innerHTML = `<section class="empty-state companion-complete composition-identity"><p class="eyebrow">行程已結束</p><h2>${escapeHtml(state.data.trip.title)}</h2><p>${escapeHtml(dateRangeLabel(state.data.trip))}</p></section>`;
+      root.innerHTML = `<section class="empty-state companion-complete composition-identity"><p class="eyebrow">Trip complete</p><h2>${escapeHtml(state.data.trip.title)}</h2><p>${escapeHtml(dateRangeLabel(state.data.trip))}</p></section>`;
       afterRender(); return;
     }
 

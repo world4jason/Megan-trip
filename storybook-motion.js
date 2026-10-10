@@ -1,29 +1,31 @@
-/* Explicit motion preference. Only "follow device" or "reduce animation"
-   are offered; system prefers-reduced-motion always takes precedence.
-   SPDX-License-Identifier: AGPL-3.0-or-later */
+/* Optional Storybook motion preference (device-local per trip).  SPDX-License-Identifier: AGPL-3.0-or-later */
 (() => {
-  const storageKey = "megan-trip:motion-v1";
-  const allowed = new Set(["system", "reduce"]);
-  let preference = "system";
-  try {
-    const saved = localStorage.getItem(storageKey);
-    if (allowed.has(saved)) preference = saved;
-  } catch { /* private browsing may forbid localStorage */ }
+  const options = new Set(["system", "reduce"]);
+  let selected = "system";
+  let key = "";
+  const storage = () => {
+    try { return localStorage; } catch { return null; }
+  };
+  const apply = () => { document.documentElement.dataset.motion = selected; };
 
-  function apply() {
-    document.documentElement.dataset.motion = preference;
-  }
-  apply();
-
-  window.MeganMotion = Object.freeze({
-    get: () => preference,
-    isReduced: () => preference === "reduce" || window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-    set(next) {
-      if (!allowed.has(next)) return false;
-      preference = next;
-      try { localStorage.setItem(storageKey, preference); } catch { /* optional persistence */ }
+  window.TravelLiteStorybookMotion = Object.freeze({
+    init(tripId) {
+      if (typeof tripId !== "string" || !tripId.trim()) return;
+      key = `travel-lite:${tripId}:storybook-motion`;
+      let saved = null;
+      try { saved = storage()?.getItem(key) || null; } catch {}
+      selected = options.has(saved) ? saved : "system";
       apply();
-      window.dispatchEvent(new CustomEvent("megan-motion-change", { detail: { preference } }));
+    },
+    get() { return selected; },
+    isReduced() {
+      return selected === "reduce" || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    },
+    set(next) {
+      if (!key || !options.has(next)) return false;
+      selected = next;
+      try { storage()?.setItem(key, selected); } catch {}
+      apply();
       return true;
     },
   });
