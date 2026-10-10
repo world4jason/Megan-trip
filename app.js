@@ -379,6 +379,18 @@ function renderMore() {
   const links = state.data.links.map((link) => `<a class="file-row" href="${escapeAttr(link.url)}" target="_blank" rel="noreferrer"><span><strong>${escapeHtml(link.label)}</strong></span><span>↗</span></a>`).join("");
   root.innerHTML = `<div class="view-stack">
     <section class="panel local-note-card"><div class="check-title-row"><h2>我的私人備註</h2><span>僅此裝置</span></div><textarea id="personal-note" rows="4" placeholder="登機門、房號、臨時備註…">${escapeHtml(state.personalNote)}</textarea><p class="helper-text">資料只儲存在本裝置，不會同步給同行者。</p></section>
+    <section class="panel settings-card">
+      <div><p class="eyebrow">裝置</p><h2>動態效果與本機資料</h2></div>
+      <p class="helper-text">本站固定以淺色繪本風呈現。</p>
+      <div class="motion-preference">
+        <div><h3>動態效果</h3><p>跟隨手機或電腦的「減少動態效果」設定，也可在本站關閉動畫。</p></div>
+        <div class="motion-options" role="group" aria-label="動態效果設定">
+          ${[["system", "跟隨裝置"], ["reduce", "減少動畫"]].map(([value, label]) =>
+            `<button class="motion-choice" type="button" data-motion-choice="${value}" aria-pressed="${(window.MeganMotion?.get() || "system") === value}">${label}</button>`).join("")}
+        </div>
+      </div>
+      <div class="storage-status"><span>本機儲存</span><strong id="storage-mode">${escapeHtml(TravelLiteStorage.getMode())}</strong></div>
+    </section>
     ${detailsSection("預約與票券", state.data.reservations.length, reservations, true)}
     ${detailsSection("費用", state.data.costs.entries.length, costs)}
     ${detailsSection("旅程備註", state.data.notes.length, notes)}
@@ -386,7 +398,7 @@ function renderMore() {
     ${detailsSection("聯絡資訊", state.data.contacts.length, contacts)}
     ${detailsSection("Journal", state.data.journal.length, journal)}
     ${detailsSection("實用連結", state.data.links.length, links)}
-    <section class="panel settings-card"><div><p class="eyebrow">裝置</p><h2>離線與本機資料</h2></div><p class="helper-text">本站固定以淺色繪本風呈現。</p><div class="storage-status"><span>本機儲存</span><strong id="storage-mode">${escapeHtml(TravelLiteStorage.getMode())}</strong></div></section>
+
   </div>`;
   const textarea = root.querySelector("#personal-note");
   let noteTimer;
@@ -394,6 +406,14 @@ function renderMore() {
     state.personalNote = textarea.value;
     clearTimeout(noteTimer);
     noteTimer = setTimeout(() => TravelLiteStorage.set(tripKey("personalNote"), state.personalNote), 180);
+  });
+  root.querySelectorAll("[data-motion-choice]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!window.MeganMotion?.set(button.dataset.motionChoice)) return;
+      root.querySelectorAll("[data-motion-choice]").forEach((choice) => {
+        choice.setAttribute("aria-pressed", String(choice.dataset.motionChoice === window.MeganMotion.get()));
+      });
+    });
   });
 }
 

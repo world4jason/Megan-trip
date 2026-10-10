@@ -3,6 +3,12 @@ import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+test.beforeEach(async ({ page }) => {
+  await page.route("https://fonts.googleapis.com/**", route =>
+    route.fulfill({ status: 200, contentType: "text/css", body: "" }));
+  await page.route("https://fonts.gstatic.com/**", route => route.abort());
+});
+
 // MapLibre is served from node_modules instead of the CDN, and map styles get a minimal local style with no
 // sources (tiles are blocked), so Map checks are hermetic and the attribution control settles immediately.
 // The version must match the one runtime-features.js loads.
@@ -724,7 +730,10 @@ test("opened disclosure menus and cards keep controls reachable at 320px", async
   expect(await openEach("details.companion-overflow")).toBeGreaterThanOrEqual(4);
   expect(await openEach(".view-stack details.info-card")).toBeGreaterThanOrEqual(1);
 
-  await page.goto(`/#trip/day/${TODAY}`);
+  // Huninn is loaded from Google Fonts; waiting for the browser's full load
+  // event can hang when the external font service is slow. The app-ready
+  // assertion below verifies the actual local page content instead.
+  await page.goto(`/#trip/day/${TODAY}`, { waitUntil: "domcontentloaded" });
   await expect(page.locator(".trip-v2-item .info-card").first()).toBeVisible();
   expect(await openEach(".trip-v2-item details.info-card")).toBeGreaterThanOrEqual(1);
   expect(await openEach("details.trip-action-menu")).toBeGreaterThanOrEqual(1);

@@ -84,3 +84,21 @@ npm run test:storybook
 ```
 
 樣式更新不會更動 `trip.json`、原有預約資料、清單勾選或本機備註內容。
+
+## 每日時間軸、重點標籤與動態效果
+
+- 點選行程頁上方的日期，可看到當天真正連續的**垂直時間軸**。有確定時間的顯示當地時刻；未提供時間的活動顯示「時間未定」，不會當成 00:00。
+- 每個停留點可選填 `transportMode`：`flight`（飛機）、`drive`（自駕）、`boat`（搭船）、`walk`（步行）。只有行程來源已說明或團隊已有自駕安排時才填，**不代表實際導航路線或轉乘**。
+- `mustGo: true` 會顯示 **★ 必去** 標籤。本次示範標了「平久保崎燈塔、9/19 與 9/20 已付款包船船潛、9/21 川平灣展望台」共 4 個重點。這是**網站編輯選出的精選**，原始 Google Docs 並未標註這些景點為強制行程。更改重點請直接編輯 `trip.json`。
+- 插畫會以很小的位移輕飄；選擇不同日期時，當日卡片與時間軸會有一次短暫彈跳。動畫只有 transform/opacity，不影響布局、點擊與資料內容。
+- 支援裝置的 `prefers-reduced-motion: reduce` 系統偏好，也可到**資訊 → 動態效果**選擇「跟隨裝置」或「減少動畫」。偏好只記錄在當前瀏覽器，不會修改共享行程或上傳。
+- 相關樣式：`storybook-theme.css`；開關：`storybook-motion.js`；時間軸：`trip-view.js`。
+
+驗證：
+
+```bash
+npm ci
+npm run test:trip
+npm run test:storybook
+npm run test:mobile
+```

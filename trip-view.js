@@ -1,6 +1,27 @@
 /* Trip overview + compact day timeline. SPDX-License-Identifier: AGPL-3.0-or-later */
 (() => {
   let tripMode = "overview";
+  let lastRenderedDate = null;
+  // Deliberately explicit: travel mode never needs to be guessed from a title.
+  const transportModes = {
+    flight: { label: "飛機", symbol: "✈" },
+    drive: { label: "自駕", symbol: "▰" },
+    boat: { label: "搭船", symbol: "≈" },
+    walk: { label: "步行", symbol: "↗" },
+  };
+
+  function transportBadge(item) {
+    const mode = Object.hasOwn(transportModes, item.transportMode) ? transportModes[item.transportMode] : null;
+    if (!mode) return "";
+    return `<span class="transport-tag transport-tag--${item.transportMode}" aria-label="交通方式：${mode.label}"><span aria-hidden="true">${mode.symbol}</span>${mode.label}</span>`;
+  }
+
+  function timeLabel(item) {
+    if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(item.start || "")) {
+      return '<span class="timeline-time timeline-time--floating">時間未定</span>';
+    }
+    return `<time class="timeline-time" datetime="${escapeAttr(item.start)}">${escapeHtml(item.start)}</time>`;
+  }
 
   function safeUrl(rawUrl, protocols = ["http:", "https:"]) {
     if (!rawUrl) return "";
@@ -140,6 +161,7 @@
   }
 
   function renderOverview() {
+    lastRenderedDate = null;
     const days = state.data.days || [];
     const highlights = Array.isArray(state.data.highlights) ? state.data.highlights : [];
     const openDecisions = days.flatMap((day) => unresolvedItems(day).map((item) => ({ day, item })));
@@ -181,29 +203,43 @@
   }
 
   function renderDay(day) {
+    // The day body is replaced on navigation. Animate only when a new date
+    // appears, not when weather or other same-day content re-renders.
+    const isNewDay = lastRenderedDate !== day.date;
+    lastRenderedDate = day.date;
     const currentDate = zonedNow(state.data.trip.timezone).date;
     const now = zonedNow(state.data.trip.timezone);
     const timeline = (day.items || []).map((item, index) => {
       const isCurrent = day.date === currentDate && now.minuteOfDay >= toMinutes(item.start) && now.minuteOfDay < toMinutes(item.end || item.start);
-      return `<div class="trip-stop-wrap">
-        <article class="timeline-item trip-v2-item ${isCurrent ? "current" : ""}">
-          <div class="timeline-time">${escapeHtml(item.start || "TBD")}</div>
-          <div class="timeline-rail"><div class="timeline-dot"></div></div>
+      return `<li class="trip-stop-wrap">
+        <article class="timeline-item trip-v2-item ${isCurrent ? "current" : ""} ${item.mustGo ? "trip-must-go" : ""}">
+          ${timeLabel(item)}
           <div class="timeline-content">
-            <div class="trip-item-top"><div><div class="item-heading"><h3>${escapeHtml(item.title)}</h3>${item.type ? `<span class="type-pill">${escapeHtml(item.type)}</span>` : ""}</div>${item.location ? `<p>${escapeHtml(item.location)}</p>` : ""}</div>${compactActions(item)}</div>
+            <div class="trip-item-top"><div>
+              <div class="item-heading">
+                <h3>${escapeHtml(item.title)}</h3>
+                ${item.mustGo ? '<span class="must-go-tag" aria-label="行程精選：必去">★ 必去</span>' : ""}
+                ${item.type ? `<span class="type-pill">${escapeHtml(item.type)}</span>` : ""}
+              </div>
+              ${item.transportMode ? `<div class="trip-transport-meta">${transportBadge(item)}</div>` : ""}
+              ${item.location ? `<p>${escapeHtml(item.location)}</p>` : ""}
+            </div>${compactActions(item)}</div>
             ${item.note ? `<p class="timeline-note">${escapeHtml(item.note)}</p>` : ""}
             ${supplementaryContent(item)}
           </div>
         </article>
         ${index < day.items.length - 1 ? transferHtml(item) : ""}
-      </div>`;
+      </li>`;
     }).join("");
 
-    root.innerHTML = `<div class="trip-v2 trip-day-view">
+    root.innerHTML = `<div class="trip-v2 trip-day-view ${isNewDay ? "day-switch-enter" : ""}">
       ${tripTabs()}
       <section class="day-summary composition-identity"><p class="eyebrow">${escapeHtml(day.label || "")} · ${prettyDate(day.date, { weekday: "short" })}</p><h2>${escapeHtml(day.title || "Trip")}</h2><p>${day.items?.length || 0} 項行程</p>${day.note ? `<p class="day-note">${escapeHtml(day.note)}</p>` : ""}</section>
       ${routeSummaryCard(day)}
-      <section class="timeline trip-v2-timeline composition-sequence">${timeline || `<div class="empty-state"><p>目前沒有安排。</p></div>`}</section>
+      <section class="trip-timeline-section" aria-label="每日時間軸">
+        <div class="trip-timeline-heading"><h3>每日時間軸</h3><p>依原行程順序排列 · 未定時間保留彈性</p></div>
+        <ol class="timeline trip-v2-timeline">${timeline || `<li class="empty-state"><p>目前沒有安排。</p></li>`}</ol>
+      </section>
     </div>`;
 
     attachOverviewHandlers();

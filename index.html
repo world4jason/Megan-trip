@@ -12,7 +12,9 @@
     <link rel="icon" href="./icon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Huninn&display=swap" rel="stylesheet" />
+    <!-- Non-blocking font CSS keeps the trip readable during slow networks. -->
+    <link href="https://fonts.googleapis.com/css2?family=Huninn&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Huninn&display=swap" rel="stylesheet" /></noscript>
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./runtime.css" />
     <link rel="stylesheet" href="./desktop-theme.css" />
@@ -35,6 +37,7 @@
       <nav class="bottom-nav" id="bottom-nav" aria-label="主要導覽"></nav>
     </div>
     <template id="error-template"><section class="panel empty-state"><p class="eyebrow">無法載入行程</p><h2>請透過 GitHub Pages 或本機網頁伺服器開啟。</h2><p>成功開啟後，網站會在裝置上快取行程，供離線參考。</p></section></template>
+    <script src="./storybook-motion.js" defer></script>
     <script src="./bootstrap.js" defer></script>
     <script src="./storage.js" defer></script>
     <script src="./app.js" defer></script>

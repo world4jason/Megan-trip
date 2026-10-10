@@ -79,3 +79,24 @@ test("站點檔案與來源授權檔案齊備", () => {
     if (file !== ".nojekyll") assert.ok(readFileSync(new URL(file, root)).length > 0);
   }
 });
+
+test("新增必去與交通方式屬於顯式編輯欄位，不替未定岸潛作出決策", () => {
+  const items = days.flatMap(day => day.items);
+  const byId = new Map(items.map(item => [item.id, item]));
+  const mustGo = items.filter(item => item.mustGo);
+  assert.deepEqual(mustGo.map(item => item.id), [
+    "d1-lighthouse", "d2-boat", "d3-boat", "d4-kabira"
+  ]);
+  assert.ok(mustGo.every(item => item.type === "景點" || item.type === "船潛"));
+  assert.equal(byId.get("d4-shore").mustGo, undefined);
+  assert.equal(byId.get("d4-shore").transportMode, undefined);
+  const allowedModes = new Set(["flight", "drive", "boat", "walk"]);
+  const transport = items.filter(item => item.transportMode);
+  assert.equal(transport.length, 13);
+  assert.ok(transport.every(item => allowedModes.has(item.transportMode)));
+  assert.equal(byId.get("d1-depart").transportMode, "flight");
+  assert.equal(byId.get("d2-boat").transportMode, "boat");
+  assert.equal(byId.get("d1-lighthouse").transportMode, "drive");
+  assert.equal(byId.get("d1-shopping").transportMode, undefined);
+  assert.ok(data.notes.some(note => note.id === "editorial-badges" && /重點/.test(note.body)));
+});

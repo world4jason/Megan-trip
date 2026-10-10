@@ -657,3 +657,311 @@ button, a, summary { -webkit-tap-highlight-color: transparent; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+/* ---------------------------------------------------------------
+   Ishigaki motion + real day timeline. Kept after the existing skin
+   so the rest of Travel Lite's responsive layout stays unchanged.
+   --------------------------------------------------------------- */
+
+/* A visible continuous guide with a marker for every sourced stop.
+   Times marked TBD remain visibly floating; nothing is rescheduled. */
+.trip-timeline-section {
+  min-width: 0;
+  display: grid;
+  gap: 12px;
+}
+.trip-timeline-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 5px 14px;
+  padding: 0 4px;
+}
+.trip-timeline-heading h3 {
+  margin: 0;
+  color: var(--ink);
+  font: 700 1.23rem/1.35 var(--font-utility);
+}
+.trip-timeline-heading p {
+  margin: 0;
+  color: var(--muted-ink);
+  font-size: .76rem;
+}
+.trip-v2-timeline {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  gap: 14px;
+  list-style: none;
+  min-width: 0;
+  margin: 0;
+  padding: 9px 0 14px 40px;
+  border: 0;
+  background: transparent;
+}
+.trip-v2-timeline::before {
+  content: "";
+  position: absolute;
+  top: 34px;
+  bottom: 42px;
+  left: 15px;
+  width: 4px;
+  background: var(--ink);
+  border-radius: 999px;
+}
+.trip-v2-timeline > .trip-stop-wrap {
+  position: relative;
+  display: block;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  margin: 0;
+  list-style: none;
+}
+.trip-v2-timeline > .trip-stop-wrap::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: 22px;
+  left: -34px;
+  width: 19px;
+  height: 19px;
+  box-sizing: border-box;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  background: var(--yamabuki);
+}
+.trip-v2-timeline > .trip-stop-wrap:nth-child(4n + 2)::before { background: var(--water); }
+.trip-v2-timeline > .trip-stop-wrap:nth-child(4n + 3)::before { background: var(--coral); }
+.trip-v2-timeline > .trip-stop-wrap:nth-child(4n + 4)::before { background: var(--bamboo); }
+.trip-v2-timeline .trip-v2-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "time" "content";
+  align-content: start;
+  gap: 10px;
+  min-width: 0;
+  padding: 15px 17px;
+  border: 3px solid var(--ink);
+  border-radius: 23px;
+  background: #fff;
+}
+.trip-v2-timeline .trip-v2-item.current { background: #F1FAE9; }
+.trip-v2-timeline .trip-v2-item.trip-must-go {
+  border-color: var(--ink);
+  background: #FFFAF0;
+}
+.trip-v2-timeline .timeline-time {
+  grid-area: time;
+  display: inline-flex;
+  align-items: center;
+  align-self: start;
+  gap: 5px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0;
+  padding: 4px 11px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--yamabuki);
+  color: var(--ink);
+  font-size: .77rem;
+  font-weight: 800;
+  line-height: 1.35;
+}
+.trip-v2-timeline .timeline-time--floating {
+  background: #F4F3ED;
+  font-weight: 700;
+}
+.trip-v2-timeline .timeline-content {
+  grid-area: content;
+  width: 100%;
+  min-width: 0;
+}
+.trip-v2-timeline .timeline-content h3 {
+  margin: 0;
+  font-size: clamp(.99rem, 2.5vw, 1.1rem);
+}
+.trip-v2-timeline .timeline-content .item-heading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.trip-v2-timeline .trip-item-top { gap: 10px; min-width: 0; }
+.trip-v2-timeline .trip-item-top > div:first-child { min-width: 0; }
+.trip-v2-timeline .trip-item-top h3 { overflow-wrap: anywhere; }
+.trip-v2-timeline .timeline-note { margin-top: 11px !important; }
+.trip-v2-timeline .trip-transfer {
+  margin: 8px 4px 0;
+  padding: 7px 10px;
+  border-left: 3px dashed var(--ink);
+  background: #F4FBFE;
+  color: var(--ink);
+}
+.trip-v2-timeline .trip-transfer-copy { padding: 0; }
+.trip-v2-timeline .trip-transfer-copy strong { color: var(--ink); }
+.trip-v2-timeline .trip-transfer-copy p { color: var(--muted-ink); }
+.trip-v2-timeline .trip-v2-item[data-storybook-kind] .timeline-time::after {
+  /* The date pill carries the clock; the illustration belongs with the stop
+     card, never inside the time label. */
+  content: none !important;
+}
+.trip-v2-timeline .trip-v2-item[data-storybook-kind] .timeline-content::after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: 17px;
+  top: 15px;
+  width: 39px;
+  height: 39px;
+  background: url("./assets/bay.svg") center/contain no-repeat;
+  pointer-events: none;
+}
+.trip-v2-timeline .trip-v2-item[data-storybook-kind] { position: relative; }
+.trip-v2-timeline .trip-v2-item[data-storybook-kind] > .timeline-content {
+  padding-top: 0;
+}
+.trip-v2-timeline .trip-v2-item[data-storybook-kind="flight"] .timeline-content::after { background-image: url("./assets/plane.svg"); }
+.trip-v2-timeline .trip-v2-item[data-storybook-kind="car"] .timeline-content::after { background-image: url("./assets/car.svg"); }
+.trip-v2-timeline .trip-v2-item[data-storybook-kind="boat"] .timeline-content::after { background-image: url("./assets/boat.svg"); }
+.trip-v2-timeline .trip-v2-item[data-storybook-kind="food"] .timeline-content::after { background-image: url("./assets/icecream.svg"); }
+.trip-v2-timeline .trip-v2-item[data-storybook-kind="lighthouse"] .timeline-content::after { background-image: url("./assets/lighthouse.svg"); }
+.trip-v2-timeline .trip-v2-item[data-storybook-kind="hotel"] .timeline-content::after { background-image: url("./assets/hotel.svg"); }
+.trip-v2-timeline .trip-v2-item[data-storybook-kind="manta"] .timeline-content::after { background-image: url("./assets/manta.svg"); }
+.must-go-tag,
+.transport-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 2px 8px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: .73rem;
+  font-weight: 800;
+  line-height: 1.45;
+  white-space: nowrap;
+}
+.must-go-tag { background: var(--coral); }
+.trip-transport-meta { display: flex; margin: 7px 0 5px; flex-wrap: wrap; gap: 7px; }
+.transport-tag { font-weight: 700; }
+.transport-tag--flight { background: var(--water); }
+.transport-tag--drive { background: var(--yamabuki); }
+.transport-tag--boat { background: var(--bamboo); }
+.transport-tag--walk { background: var(--coral); }
+.transport-tag > span:first-child { font-size: .9rem; }
+
+/* Very gentle illustrated motion: only paint/composite transforms change. */
+@keyframes storybook-float {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-4px) rotate(1.2deg); }
+}
+.trip-overview-hero::after {
+  animation: storybook-float 6.8s ease-in-out infinite;
+}
+.trip-overview-day::after,
+.trip-highlight-card::after,
+.trip-open-decision::after {
+  animation: storybook-float 6.2s ease-in-out infinite;
+}
+.trip-overview-day:nth-child(2n)::after,
+.trip-highlight-card:nth-child(2n)::after { animation-delay: -2s; }
+.trip-day-view > .day-summary::after {
+  /* The original centering transform must be present in the keyframes. */
+  animation: storybook-day-illustration 6.5s ease-in-out infinite;
+}
+@keyframes storybook-day-illustration {
+  0%, 100% { transform: translateY(-50%) rotate(0deg); }
+  50% { transform: translateY(calc(-50% - 4px)) rotate(1.2deg); }
+}
+.trip-v2-item[data-storybook-kind] .timeline-content::after {
+  animation: storybook-float 6.7s ease-in-out infinite;
+}
+.trip-stop-wrap:nth-child(2n) .timeline-content::after { animation-delay: -2.4s; }
+
+/* The bounce accompanies a *date change* only. */
+@keyframes storybook-day-spring {
+  0% { opacity: .85; transform: translateY(10px) scale(.988); }
+  48% { opacity: 1; transform: translateY(-5px) scale(1.008); }
+  72% { transform: translateY(2px) scale(.998); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes storybook-chip-pop {
+  0% { transform: scale(.94); }
+  55% { transform: scale(1.045); }
+  100% { transform: scale(1); }
+}
+.trip-day-view.day-switch-enter > .day-summary,
+.trip-day-view.day-switch-enter > .trip-timeline-section {
+  animation: storybook-day-spring 490ms cubic-bezier(.2,.75,.25,1) both;
+  transform-origin: top center;
+}
+.trip-day-view.day-switch-enter > .trip-timeline-section { animation-delay: 55ms; }
+.trip-day-view.day-switch-enter .trip-v2-tabs .day-chip.active {
+  animation: storybook-chip-pop 420ms ease-out both;
+}
+
+/* Local motion preference controls are deliberately distinct from theme. */
+.motion-preference {
+  display: grid;
+  gap: 9px;
+  padding: 14px 0;
+  border-top: 2px dashed var(--ink);
+}
+.motion-preference h3 { margin: 0; font-size: 1rem; }
+.motion-preference p { margin: 3px 0 0; color: var(--muted-ink); font-size: .8rem; }
+.motion-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.motion-choice {
+  appearance: none;
+  min-height: 42px;
+  padding: 8px 13px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  font: 700 .84rem/1.3 var(--font-utility);
+}
+.motion-choice[aria-pressed="true"] { background: var(--bamboo); }
+
+/* At compact widths don't consume card width with an over-sized date column. */
+@media (max-width: 520px) {
+  .trip-v2-timeline { gap: 11px; padding-left: 28px; }
+  .trip-v2-timeline::before { left: 9px; }
+  .trip-v2-timeline > .trip-stop-wrap::before { left: -27px; }
+  .trip-v2-timeline .trip-v2-item { padding: 13px; }
+  .trip-timeline-heading { display: block; }
+  .trip-timeline-heading p { margin-top: 3px; }
+  .trip-v2-timeline .trip-v2-item[data-storybook-kind] > .timeline-content { padding-top: 0; }
+  .trip-v2-timeline .trip-v2-item[data-storybook-kind] .timeline-content::after {
+    top: 12px; right: 12px; width: 34px; height: 34px;
+  }
+}
+
+/* There must be no motion if the traveller asks for less motion, whether
+   that choice came from the OS or from the site's own switch. */
+html[data-motion="reduce"] *,
+html[data-motion="reduce"] *::before,
+html[data-motion="reduce"] *::after {
+  animation: none !important;
+  transition-duration: 0s !important;
+  scroll-behavior: auto !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}

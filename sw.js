@@ -1,4 +1,4 @@
-const CACHE = "megan-trip-storybook-v2";
+const CACHE = "megan-trip-storybook-timeline-v3";
 const RUNTIME_CACHE = "travel-lite-runtime-v1";
 const scopeUrl = (path) => new URL(path, self.registration.scope).href;
 const INDEX = scopeUrl("./index.html");
@@ -27,6 +27,7 @@ const CORE = [
   "./timezone.js",
   "./long-trip-nav.js",
   "./today-brief.js",
+  "./storybook-motion.js",
   "./storybook-decor.js",
   "./assets/ishigaki-scene.svg",
   "./assets/plane.svg",

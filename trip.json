@@ -6,8 +6,8 @@
     "startDate": "2026-09-18",
     "endDate": "2026-09-22",
     "timezone": "Asia/Tokyo",
-    "updatedAt": "2026-10-10T16:08:00+08:00",
-    "revision": "ishigaki-2026-10-10-v1",
+    "updatedAt": "2026-10-10T18:27:48+08:00",
+    "revision": "ishigaki-2026-10-10-v2-timeline",
     "accent": "#146b73",
     "themeColor": "#0b1020",
     "homeLabel": "日本 · 石垣島",
@@ -110,7 +110,8 @@
           "location": "桃園國際機場 TPE",
           "timezone": "Asia/Taipei",
           "note": "原文件航班：IT736，TPE–ISG，06:35–08:35。出發時間按台灣當地時間記錄。",
-          "mapQuery": "Taoyuan International Airport Terminal 1"
+          "mapQuery": "Taoyuan International Airport Terminal 1",
+          "transportMode": "flight"
         },
         {
           "id": "d1-arrive",
@@ -120,7 +121,8 @@
           "location": "新石垣機場（南ぬ島石垣空港）",
           "mapQuery": "New Ishigaki Airport, 石垣島 日本",
           "timezone": "Asia/Tokyo",
-          "note": "依原文件 08:35 表定抵達，時間按日本當地時間記錄。"
+          "note": "依原文件 08:35 表定抵達，時間按日本當地時間記錄。",
+          "transportMode": "flight"
         },
         {
           "id": "d1-car-window",
@@ -156,7 +158,8 @@
           "type": "景點",
           "location": "平久保半島",
           "mapQuery": "Hirakubo Peninsula, 石垣島 日本",
-          "note": "來源註記：馬場級和牛拍照點。"
+          "note": "來源註記：馬場級和牛拍照點。",
+          "transportMode": "drive"
         },
         {
           "id": "d1-lighthouse",
@@ -164,7 +167,9 @@
           "title": "平久保崎燈塔",
           "type": "景點",
           "location": "平久保崎燈塔",
-          "mapQuery": "Hirakubozaki Lighthouse, 石垣島 日本"
+          "mapQuery": "Hirakubozaki Lighthouse, 石垣島 日本",
+          "transportMode": "drive",
+          "mustGo": true
         },
         {
           "id": "d1-kuura",
@@ -172,7 +177,8 @@
           "title": "久宇良海岸（Kuura Beach）",
           "type": "景點",
           "location": "久宇良海岸 Kuura Beach",
-          "mapQuery": "Kuura Beach, 石垣島 日本"
+          "mapQuery": "Kuura Beach, 石垣島 日本",
+          "transportMode": "drive"
         },
         {
           "id": "d1-maru",
@@ -242,7 +248,9 @@
               "label": "船潛集合導航",
               "url": "https://maps.app.goo.gl/SSXpDfocZACM9acA?g_st=icj"
             }
-          ]
+          ],
+          "transportMode": "boat",
+          "mustGo": true
         },
         {
           "id": "d2-cafe",
@@ -320,7 +328,9 @@
               "label": "船潛集合導航",
               "url": "https://maps.app.goo.gl/SSXpDfocZACM9acA?g_st=icj"
             }
-          ]
+          ],
+          "transportMode": "boat",
+          "mustGo": true
         },
         {
           "id": "d3-emerald",
@@ -380,7 +390,9 @@
                 "url": "https://docs.google.com/document/d/1in0UFMqSc_ZhXo1bsyK4G2yJ0giDaayiTTjCaoDhE2g/edit"
               }
             ]
-          }
+          },
+          "transportMode": "drive",
+          "mustGo": true
         },
         {
           "id": "d4-uganzaki",
@@ -388,7 +400,8 @@
           "title": "石垣御神崎燈塔",
           "type": "景點",
           "location": "石垣御神崎燈塔",
-          "mapQuery": "Oganzaki Lighthouse, 石垣島 日本"
+          "mapQuery": "Oganzaki Lighthouse, 石垣島 日本",
+          "transportMode": "drive"
         },
         {
           "id": "d4-cave",
@@ -397,7 +410,8 @@
           "type": "景點",
           "location": "石垣島鍾乳洞",
           "mapQuery": "Ishigaki Island Limestone Cave, 石垣島 日本",
-          "note": "原文件註記『門票 250$』，幣別與票價未核實。"
+          "note": "原文件註記『門票 250$』，幣別與票價未核實。",
+          "transportMode": "drive"
         },
         {
           "id": "d4-shore",
@@ -465,7 +479,8 @@
           "type": "租車",
           "location": "NIPPON 租車 石垣機場營業所",
           "mapQuery": "Nippon Rent-A-Car Ishigaki Airport, 石垣島 日本",
-          "note": "原文件計畫 07:00 還車；租車資料規定 08:00 前還車。"
+          "note": "原文件計畫 07:00 還車；租車資料規定 08:00 前還車。",
+          "transportMode": "drive"
         },
         {
           "id": "d5-airport",
@@ -484,7 +499,8 @@
           "location": "南ぬ島石垣空港 ISG",
           "mapQuery": "New Ishigaki Airport, 石垣島 日本",
           "timezone": "Asia/Tokyo",
-          "note": "原文件：IT737，ISG–TPE，09:25–09:35。此處 09:25 記作日本當地時間；請核對電子機票。"
+          "note": "原文件：IT737，ISG–TPE，09:25–09:35。此處 09:25 記作日本當地時間；請核對電子機票。",
+          "transportMode": "flight"
         },
         {
           "id": "d5-arrive",
@@ -494,7 +510,8 @@
           "location": "臺灣桃園國際機場 TPE",
           "timezone": "Asia/Taipei",
           "mapQuery": "Taoyuan International Airport Taiwan",
-          "note": "來源只寫『09:25–09:35』，09:35 可能是台灣當地抵達時刻，尚未驗證。請以航空公司通知為準。"
+          "note": "來源只寫『09:25–09:35』，09:35 可能是台灣當地抵達時刻，尚未驗證。請以航空公司通知為準。",
+          "transportMode": "flight"
         }
       ]
     }
@@ -822,6 +839,11 @@
       "id": "privacy",
       "title": "公開頁面注意",
       "body": "本站部署在公開 GitHub Pages。私人預約編號與同行者姓名未寫入公開資料。如需保存請使用網站「更多」中的裝置本機備註；本機備註不會同步給同行者。"
+    },
+    {
+      "id": "editorial-badges",
+      "title": "時間軸與「必去」說明",
+      "body": "時間軸沿用來源行程順序，時間未定的地點不代表已排定到訪時刻。「必去」是本網站為了方便閱讀而挑出的編輯精選重點（平久保崎燈塔、兩天已付款的包船船潛、川平灣展望台），不是原始主辦者另行確認的強制行程；可由專案維護者調整 mustGo。飛機、船、自駕標籤只說明來源支持的交通型態，不代表已核實的導航路線、距離或到站方式。"
     }
   ],
   "files": [
