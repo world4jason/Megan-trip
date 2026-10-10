@@ -1,0 +1,860 @@
+{
+  "trip": {
+    "id": "ishigaki-jerry-2026",
+    "title": "傑瑞團｜石垣島",
+    "subtitle": "五天四夜 · 船潛 × 自駕",
+    "startDate": "2026-09-18",
+    "endDate": "2026-09-22",
+    "timezone": "Asia/Tokyo",
+    "updatedAt": "2026-10-10T16:08:00+08:00",
+    "revision": "ishigaki-2026-10-10-v1",
+    "accent": "#146b73",
+    "themeColor": "#0b1020",
+    "homeLabel": "日本 · 石垣島",
+    "center": {
+      "lat": 24.34,
+      "lng": 124.16
+    }
+  },
+  "ui": {
+    "defaultView": "trip",
+    "theme": "system",
+    "locale": "zh-TW",
+    "bottomNav": [
+      "trip",
+      "now",
+      "map",
+      "check",
+      "more"
+    ],
+    "labels": {
+      "navTrip": "行程",
+      "navNow": "時間",
+      "navMap": "地圖",
+      "navCheck": "清單",
+      "navMore": "資訊"
+    }
+  },
+  "providers": {
+    "mapStyle": "https://tiles.openfreemap.org/styles/liberty",
+    "mapStyleLight": "https://tiles.openfreemap.org/styles/liberty",
+    "mapStyleDark": "https://tiles.openfreemap.org/styles/dark",
+    "weatherEndpoint": "https://api.open-meteo.com/v1/forecast",
+    "googleMapsEmbedKey": ""
+  },
+  "highlights": [
+    {
+      "id": "highlight-dives",
+      "dateLabel": "9/19–9/20",
+      "title": "連續兩天包船船潛",
+      "icon": "◉",
+      "status": "已付款（原文件）",
+      "note": "集合 08:10；預計 07:50 提前抵達找停車位。出船約 08:30，返程 16:00 或 16:30。"
+    },
+    {
+      "id": "highlight-shore",
+      "dateLabel": "9/21",
+      "title": "岸潛候選地點",
+      "icon": "◇",
+      "status": "候選／未定案",
+      "note": "米原、青之洞窟、Osaki、山原、川平石崎海域共五處；並非五個確定下水點。請向當地合格潛店確認海況、入水條件及安全性。"
+    },
+    {
+      "id": "highlight-selfdrive",
+      "dateLabel": "9/18–9/22",
+      "title": "自駕與島上景點",
+      "icon": "↗",
+      "status": "已預定（原文件）",
+      "note": "原文件安排三輛五人座車；實際行車路線與時間需依當日狀況確認。"
+    }
+  ],
+  "days": [
+    {
+      "id": "d1",
+      "date": "2026-09-18",
+      "label": "第 1 天",
+      "title": "抵達石垣島・北部兜風",
+      "routeLabel": "抵達與北部",
+      "routeSummary": [
+        "桃園機場",
+        "石垣機場",
+        "取車",
+        "石垣市區",
+        "平久保半島",
+        "平久保崎燈塔",
+        "久宇良海岸",
+        "燒肉晚餐",
+        "住宿"
+      ],
+      "reminders": [
+        "來源主表寫 09:30 租車，訂車資訊寫 10:00 取車；兩者需核對。",
+        "IT736 06:35 台灣時間起飛、08:35 日本時間抵達（請依電子機票確認當地時間）。",
+        "17:30 Ishigaki beef MARU，原文件註明 12 位；請核對訂位。"
+      ],
+      "items": [
+        {
+          "id": "d1-meet",
+          "start": "04:00",
+          "title": "桃園機場集合",
+          "type": "集合",
+          "location": "桃園國際機場第一航廈",
+          "mapQuery": "桃園國際機場第一航廈 台灣",
+          "timezone": "Asia/Taipei",
+          "note": "航廈：第一航廈；辦理登機與出境。"
+        },
+        {
+          "id": "d1-depart",
+          "start": "06:35",
+          "title": "IT736 桃園 → 石垣",
+          "type": "航班",
+          "location": "桃園國際機場 TPE",
+          "timezone": "Asia/Taipei",
+          "note": "原文件航班：IT736，TPE–ISG，06:35–08:35。出發時間按台灣當地時間記錄。",
+          "mapQuery": "Taoyuan International Airport Terminal 1"
+        },
+        {
+          "id": "d1-arrive",
+          "start": "08:35",
+          "title": "抵達石垣機場",
+          "type": "抵達",
+          "location": "新石垣機場（南ぬ島石垣空港）",
+          "mapQuery": "New Ishigaki Airport, 石垣島 日本",
+          "timezone": "Asia/Tokyo",
+          "note": "依原文件 08:35 表定抵達，時間按日本當地時間記錄。"
+        },
+        {
+          "id": "d1-car-window",
+          "start": "09:30",
+          "title": "租車集合／手續時間待確認",
+          "type": "租車",
+          "location": "新石垣機場 NIPPON 租車",
+          "mapQuery": "Nippon Rent-A-Car Ishigaki Airport, 石垣島 日本",
+          "note": "來源行程主表寫 09:30；租車資料另寫 10:00，請以訂單為準。"
+        },
+        {
+          "id": "d1-car",
+          "start": "10:00",
+          "title": "NIPPON 取車",
+          "type": "租車",
+          "location": "NIPPON 租車 石垣機場營業所",
+          "mapQuery": "Nippon Rent-A-Car Ishigaki Airport, 石垣島 日本",
+          "note": "來源訂車資訊：2026/9/18 10:00。三輛五人座小轎車，機場營業所電話 050-1712-2421。公共網站不放預約編號。"
+        },
+        {
+          "id": "d1-shopping",
+          "start": "TBD",
+          "title": "石垣島市區採買",
+          "type": "購物",
+          "location": "石垣島市區",
+          "mapQuery": "Ishigaki city centre, 石垣島 日本",
+          "note": "和牛餅乾、辣椒醬、藥局用品等。"
+        },
+        {
+          "id": "d1-north",
+          "start": "TBD",
+          "title": "平久保半島",
+          "type": "景點",
+          "location": "平久保半島",
+          "mapQuery": "Hirakubo Peninsula, 石垣島 日本",
+          "note": "來源註記：馬場級和牛拍照點。"
+        },
+        {
+          "id": "d1-lighthouse",
+          "start": "TBD",
+          "title": "平久保崎燈塔",
+          "type": "景點",
+          "location": "平久保崎燈塔",
+          "mapQuery": "Hirakubozaki Lighthouse, 石垣島 日本"
+        },
+        {
+          "id": "d1-kuura",
+          "start": "TBD",
+          "title": "久宇良海岸（Kuura Beach）",
+          "type": "景點",
+          "location": "久宇良海岸 Kuura Beach",
+          "mapQuery": "Kuura Beach, 石垣島 日本"
+        },
+        {
+          "id": "d1-maru",
+          "start": "17:30",
+          "title": "Ishigaki beef MARU 燒肉",
+          "type": "晚餐",
+          "location": "石垣島燒肉 Ishigaki beef MARU",
+          "mapQuery": "Ishigaki beef MARU, 石垣島 日本",
+          "note": "原文件晚餐時間 17:30、12 位；請再確認是否已完成訂位。"
+        },
+        {
+          "id": "d1-hotel",
+          "start": "TBD",
+          "title": "入住 Hotel Ishigaki and Chikonkiya",
+          "type": "住宿",
+          "location": "hotel ishigaki and chikonkiya，石垣島",
+          "mapsUrl": "https://maps.app.goo.gl/SRKjNoR4kbzc18d98",
+          "note": "雙床房、一人一床；住宿未含早餐，附近有全家及超市。"
+        }
+      ]
+    },
+    {
+      "id": "d2",
+      "date": "2026-09-19",
+      "label": "第 2 天",
+      "title": "船潛第一天・川平周邊",
+      "routeLabel": "船潛與西岸",
+      "routeSummary": [
+        "船潛集合",
+        "包船船潛",
+        "ALOALO CAFE",
+        "川平公園展望台",
+        "居酒屋 八重山村"
+      ],
+      "reminders": [
+        "當天先換好泳衣／防寒衣再集合，07:50 前後抵達集合點附近找車位。",
+        "船家 08:10 集合；船潛 08:30 出船，可能 16:00 或 16:30 返回。"
+      ],
+      "items": [
+        {
+          "id": "d2-parking",
+          "start": "07:50",
+          "title": "提前抵達停車集合區",
+          "type": "提醒",
+          "location": "船潛集合點",
+          "mapsUrl": "https://maps.app.goo.gl/SSXpDfocZACM9acA?g_st=icj",
+          "note": "此為原文件建議抵達時間，預留找車位時間。"
+        },
+        {
+          "id": "d2-gather",
+          "start": "08:10",
+          "title": "船潛集合",
+          "type": "船潛",
+          "location": "包船船潛集合點",
+          "mapsUrl": "https://maps.app.goo.gl/SSXpDfocZACM9acA?g_st=icj",
+          "note": "出發前先換裝完畢，依船家指定地點集合。"
+        },
+        {
+          "id": "d2-boat",
+          "start": "08:30",
+          "title": "包船船潛（第 1 天）",
+          "type": "船潛",
+          "location": "石垣島周邊海域",
+          "note": "來源標示預計出船 08:30，結束約 16:00／16:30；潛點由船家安排。",
+          "externalLinks": [
+            {
+              "label": "船潛集合導航",
+              "url": "https://maps.app.goo.gl/SSXpDfocZACM9acA?g_st=icj"
+            }
+          ]
+        },
+        {
+          "id": "d2-cafe",
+          "start": "TBD",
+          "title": "ALOALO CAFE 景觀咖啡廳",
+          "type": "咖啡",
+          "location": "ALOALO CAFE 石垣島",
+          "mapQuery": "ALOALO CAFE Ishigaki, 石垣島 日本",
+          "note": "船潛後的陸遊安排；未提供確切時間。"
+        },
+        {
+          "id": "d2-kabira",
+          "start": "TBD",
+          "title": "川平公園展望台",
+          "type": "景點",
+          "location": "川平公園展望台",
+          "mapQuery": "Kabira Park Observation Deck, 石垣島 日本",
+          "note": "與 9/21 川平灣景點重複，依原文件保留。"
+        },
+        {
+          "id": "d2-dinner",
+          "start": "TBD",
+          "title": "居酒屋 八重山村",
+          "type": "晚餐",
+          "location": "居酒屋 八重山村",
+          "mapQuery": "八重山村 居酒屋, 石垣島 日本",
+          "note": "原文件安排晚餐，沒有指定時間或訂位狀態。"
+        }
+      ]
+    },
+    {
+      "id": "d3",
+      "date": "2026-09-20",
+      "label": "第 3 天",
+      "title": "船潛第二天・冰品與海景",
+      "routeLabel": "船潛與市區",
+      "routeSummary": [
+        "船潛集合",
+        "包船船潛",
+        "祖母綠之海觀景台",
+        "Mirumiru Hompo 本店"
+      ],
+      "reminders": [
+        "集合點與 9/19 相同，需先換裝完成。",
+        "船家 08:10 集合；預計 08:30 出船，約 16:00 或 16:30 返回。"
+      ],
+      "items": [
+        {
+          "id": "d3-parking",
+          "start": "07:50",
+          "title": "提前抵達停車集合區",
+          "type": "提醒",
+          "location": "船潛集合點",
+          "mapsUrl": "https://maps.app.goo.gl/SSXpDfocZACM9acA?g_st=icj",
+          "note": "來源建議 07:50 到集合地點附近找停車位。"
+        },
+        {
+          "id": "d3-gather",
+          "start": "08:10",
+          "title": "船潛集合",
+          "type": "船潛",
+          "location": "包船船潛集合點",
+          "mapsUrl": "https://maps.app.goo.gl/SSXpDfocZACM9acA?g_st=icj",
+          "note": "先換裝完成。"
+        },
+        {
+          "id": "d3-boat",
+          "start": "08:30",
+          "title": "包船船潛（第 2 天）",
+          "type": "船潛",
+          "location": "石垣島周邊海域",
+          "note": "兩天包船費用原文件註記已付款；回程時間約 16:00 或 16:30。",
+          "externalLinks": [
+            {
+              "label": "船潛集合導航",
+              "url": "https://maps.app.goo.gl/SSXpDfocZACM9acA?g_st=icj"
+            }
+          ]
+        },
+        {
+          "id": "d3-emerald",
+          "start": "TBD",
+          "title": "祖母綠之海觀景台",
+          "type": "景點",
+          "location": "祖母綠之海觀景台",
+          "mapQuery": "Emerald Sea Observatory Ishigaki, 石垣島 日本"
+        },
+        {
+          "id": "d3-icecream",
+          "start": "TBD",
+          "title": "Mirumiru Hompo Honten 冰店",
+          "type": "甜點",
+          "location": "Mirumiru Hompo Honten",
+          "mapQuery": "Mirumiru Hompo Honten, 石垣島 日本"
+        }
+      ]
+    },
+    {
+      "id": "d4",
+      "date": "2026-09-21",
+      "label": "第 4 天",
+      "title": "川平灣・燈塔・岸潛候選",
+      "routeLabel": "西岸與岸潛",
+      "routeSummary": [
+        "川平公園展望台",
+        "御神崎燈塔",
+        "石垣島鍾乳洞",
+        "岸潛（候選）"
+      ],
+      "reminders": [
+        "岸潛五處僅為候選，不代表一天必去五處。需由合格教練／在地潛店依海況決定。",
+        "來源提醒避免低潮露礁、珊瑚受損及離岸流；勿只依原文水深估計自行下水。",
+        "鍾乳洞費用原文寫 250$，幣別和現行票價未確認。"
+      ],
+      "items": [
+        {
+          "id": "d4-kabira",
+          "start": "TBD",
+          "title": "Kabira Park Observation Deck",
+          "type": "景點",
+          "location": "川平公園展望台",
+          "mapQuery": "Kabira Park Observation Deck, 石垣島 日本",
+          "note": "川平灣以藍綠色海水與小島景觀聞名。原文件介紹灣內不供游泳，可考慮玻璃底船（未列為已訂行程）。",
+          "infoCard": {
+            "label": "來源景點介紹",
+            "title": "川平灣（Kabira Bay）",
+            "summary": "從高處展望台欣賞海水漸層與散落小島。",
+            "facts": [
+              "原文件引用米其林綠色指南三星描述，未另行驗證現況。",
+              "來源提及因潮流與珍珠養殖，不在灣內游泳。"
+            ],
+            "sourceLinks": [
+              {
+                "label": "原始行程文件",
+                "url": "https://docs.google.com/document/d/1in0UFMqSc_ZhXo1bsyK4G2yJ0giDaayiTTjCaoDhE2g/edit"
+              }
+            ]
+          }
+        },
+        {
+          "id": "d4-uganzaki",
+          "start": "TBD",
+          "title": "石垣御神崎燈塔",
+          "type": "景點",
+          "location": "石垣御神崎燈塔",
+          "mapQuery": "Oganzaki Lighthouse, 石垣島 日本"
+        },
+        {
+          "id": "d4-cave",
+          "start": "TBD",
+          "title": "石垣島鍾乳洞",
+          "type": "景點",
+          "location": "石垣島鍾乳洞",
+          "mapQuery": "Ishigaki Island Limestone Cave, 石垣島 日本",
+          "note": "原文件註記『門票 250$』，幣別與票價未核實。"
+        },
+        {
+          "id": "d4-shore",
+          "start": "TBD",
+          "title": "岸潛地點待選",
+          "type": "岸潛",
+          "location": "石垣島岸潛候選地點",
+          "note": "候選：米原海灘、青之洞窟、Osaki Beach、山原海岸、川平石崎海域。依當天潮汐、海流與專業人員指示決定。",
+          "decision": {
+            "label": "待確認",
+            "prompt": "9/21 是否安排岸潛？實際選擇哪一個地點？",
+            "context": "五處為原文件備選，尚無確定入水點；需當地合格潛店核實海象、法規、難度及進出安全。",
+            "options": [
+              {
+                "id": "yonehara",
+                "label": "米原海灘",
+                "note": "近岸礁坪退潮水深可能僅 1–2 m；穿越礁門外側為約 15–25 m 斷層"
+              },
+              {
+                "id": "blue-cave",
+                "label": "青之洞窟",
+                "note": "來源描述約 5–10 m 的藍洞地形"
+              },
+              {
+                "id": "osaki",
+                "label": "Osaki Beach",
+                "note": "沙地與零散礁石，外側坡度下切約 15–25 m"
+              },
+              {
+                "id": "yamabare",
+                "label": "山原海岸",
+                "note": "來源描述 V 字形峽谷與通道，外圍約 15–20 m"
+              },
+              {
+                "id": "manta",
+                "label": "川平石崎海域（Manta 點）",
+                "note": "來源描述大型礁盤及清潔站，約 8–15 m；需向當地潛店確認進出限制"
+              }
+            ]
+          }
+        }
+      ],
+      "note": "來源將陸遊和岸潛都列於 9/21，未提供起訖時間與最終優先順序。"
+    },
+    {
+      "id": "d5",
+      "date": "2026-09-22",
+      "label": "第 5 天",
+      "title": "還車・返台",
+      "routeLabel": "返程",
+      "routeSummary": [
+        "NIPPON 還車",
+        "石垣機場報到",
+        "IT737 回台"
+      ],
+      "reminders": [
+        "NIPPON 訂單註明 08:00 前還車；行程主表預計 07:00。",
+        "回程 IT737：來源寫 09:25–09:35（ISG–TPE）。日本／台灣有 1 小時時差，請依電子機票核對兩地時區與抵達時間。"
+      ],
+      "items": [
+        {
+          "id": "d5-return-car",
+          "start": "07:00",
+          "title": "NIPPON 還車",
+          "type": "租車",
+          "location": "NIPPON 租車 石垣機場營業所",
+          "mapQuery": "Nippon Rent-A-Car Ishigaki Airport, 石垣島 日本",
+          "note": "原文件計畫 07:00 還車；租車資料規定 08:00 前還車。"
+        },
+        {
+          "id": "d5-airport",
+          "start": "07:30",
+          "title": "石垣機場 CHECK IN",
+          "type": "機場",
+          "location": "南ぬ島石垣空港",
+          "mapQuery": "New Ishigaki Airport, 石垣島 日本",
+          "note": "原文件表定 07:30 辦理報到。"
+        },
+        {
+          "id": "d5-flight",
+          "start": "09:25",
+          "title": "IT737 石垣 → 桃園",
+          "type": "航班",
+          "location": "南ぬ島石垣空港 ISG",
+          "mapQuery": "New Ishigaki Airport, 石垣島 日本",
+          "timezone": "Asia/Tokyo",
+          "note": "原文件：IT737，ISG–TPE，09:25–09:35。此處 09:25 記作日本當地時間；請核對電子機票。"
+        },
+        {
+          "id": "d5-arrive",
+          "start": "09:35",
+          "title": "抵達桃園（來源時間待確認）",
+          "type": "抵達",
+          "location": "臺灣桃園國際機場 TPE",
+          "timezone": "Asia/Taipei",
+          "mapQuery": "Taoyuan International Airport Taiwan",
+          "note": "來源只寫『09:25–09:35』，09:35 可能是台灣當地抵達時刻，尚未驗證。請以航空公司通知為準。"
+        }
+      ]
+    }
+  ],
+  "todos": [
+    {
+      "id": "confirm-it737",
+      "label": "核對 IT737 回程的時區、起飛及抵達時間",
+      "priority": "high"
+    },
+    {
+      "id": "confirm-car-window",
+      "label": "核對 NIPPON 取車 09:30／10:00 的差異",
+      "priority": "high"
+    },
+    {
+      "id": "confirm-dinner",
+      "label": "確認 9/18 MARU 17:30 的 12 人用餐安排",
+      "priority": "normal"
+    },
+    {
+      "id": "diving-check",
+      "label": "確認船潛／岸潛海況、健康狀態、裝備與安全指引",
+      "priority": "high"
+    },
+    {
+      "id": "offline-ready",
+      "label": "離線使用前，在手機上開啟本站並完成快取",
+      "priority": "normal"
+    }
+  ],
+  "checklists": [
+    {
+      "id": "documents",
+      "title": "證件與支付",
+      "items": [
+        {
+          "id": "passport",
+          "label": "護照"
+        },
+        {
+          "id": "entry",
+          "label": "入境所需文件（原清單註記「電子簽」，請依身分核對）"
+        },
+        {
+          "id": "driver",
+          "label": "駕照"
+        },
+        {
+          "id": "driver-ja",
+          "label": "駕照日文譯本"
+        },
+        {
+          "id": "health-card",
+          "label": "健保卡"
+        },
+        {
+          "id": "cash",
+          "label": "現金與信用卡"
+        }
+      ]
+    },
+    {
+      "id": "diving-gear",
+      "title": "潛水與海邊裝備",
+      "items": [
+        {
+          "id": "dive-computer",
+          "label": "潛水錶"
+        },
+        {
+          "id": "mask-2",
+          "label": "面鏡 × 2"
+        },
+        {
+          "id": "fins",
+          "label": "蛙鞋"
+        },
+        {
+          "id": "snorkel",
+          "label": "呼吸管"
+        },
+        {
+          "id": "gloves",
+          "label": "手套"
+        },
+        {
+          "id": "socks",
+          "label": "襪套"
+        },
+        {
+          "id": "white-rabbit",
+          "label": "小白兔（原始清單用語）"
+        },
+        {
+          "id": "weight-belt",
+          "label": "配重帶"
+        },
+        {
+          "id": "weights",
+          "label": "配重"
+        },
+        {
+          "id": "anti-fog",
+          "label": "除霧劑"
+        },
+        {
+          "id": "sunscreen",
+          "label": "防曬乳"
+        },
+        {
+          "id": "hood",
+          "label": "潛水帽"
+        },
+        {
+          "id": "towel-jacket",
+          "label": "毛巾衣"
+        },
+        {
+          "id": "dive-torch",
+          "label": "潛水燈"
+        },
+        {
+          "id": "dry-bag",
+          "label": "防水包"
+        },
+        {
+          "id": "swimsuit",
+          "label": "泳衣／防寒衣"
+        }
+      ]
+    },
+    {
+      "id": "electronics",
+      "title": "相機與電子用品",
+      "items": [
+        {
+          "id": "camera",
+          "label": "相機"
+        },
+        {
+          "id": "charger",
+          "label": "充電器"
+        },
+        {
+          "id": "selfie",
+          "label": "自拍桿"
+        },
+        {
+          "id": "laptop",
+          "label": "電腦"
+        },
+        {
+          "id": "card-reader",
+          "label": "讀卡機"
+        },
+        {
+          "id": "sd-card",
+          "label": "記憶卡"
+        },
+        {
+          "id": "battery",
+          "label": "電池"
+        }
+      ]
+    },
+    {
+      "id": "personal",
+      "title": "生活用品與衣物",
+      "items": [
+        {
+          "id": "cosmetics",
+          "label": "化妝品"
+        },
+        {
+          "id": "ziplock",
+          "label": "夾鏈袋"
+        },
+        {
+          "id": "medicine",
+          "label": "藥品（包含需要的暈船藥）"
+        },
+        {
+          "id": "toothbrush",
+          "label": "牙線／牙刷"
+        },
+        {
+          "id": "mask",
+          "label": "口罩"
+        },
+        {
+          "id": "clothes",
+          "label": "日常衣服"
+        },
+        {
+          "id": "jacket",
+          "label": "外套"
+        },
+        {
+          "id": "glasses",
+          "label": "眼鏡"
+        },
+        {
+          "id": "contacts",
+          "label": "隱形眼鏡"
+        },
+        {
+          "id": "sunglasses",
+          "label": "太陽眼鏡"
+        }
+      ]
+    }
+  ],
+  "reservations": [
+    {
+      "id": "flight-out",
+      "type": "航班",
+      "title": "IT736 桃園 → 石垣",
+      "date": "2026-09-18",
+      "time": "06:35 TPE → 08:35 ISG（兩地當地時間）",
+      "location": "桃園第一航廈",
+      "status": "已開票（來源）"
+    },
+    {
+      "id": "rentcar",
+      "type": "租車",
+      "title": "NIPPON 租車・三輛五人座",
+      "date": "2026-09-18",
+      "time": "10:00 取車；9/22 08:00 前還車",
+      "location": "石垣機場營業所",
+      "status": "已預定（來源）"
+    },
+    {
+      "id": "hotel",
+      "type": "住宿",
+      "title": "Hotel Ishigaki and Chikonkiya",
+      "date": "2026-09-18",
+      "time": "9/18–9/22（四晚）",
+      "location": "石垣島市區；雙床房",
+      "status": "已預定（來源）",
+      "url": "https://maps.app.goo.gl/SRKjNoR4kbzc18d98"
+    },
+    {
+      "id": "boat-d1",
+      "type": "船潛",
+      "title": "包船船潛・第一天",
+      "date": "2026-09-19",
+      "time": "08:10 集合",
+      "location": "石垣島",
+      "status": "已付款（來源）",
+      "url": "https://maps.app.goo.gl/SSXpDfocZACM9acA?g_st=icj"
+    },
+    {
+      "id": "boat-d2",
+      "type": "船潛",
+      "title": "包船船潛・第二天",
+      "date": "2026-09-20",
+      "time": "08:10 集合",
+      "location": "石垣島",
+      "status": "已付款（來源）",
+      "url": "https://maps.app.goo.gl/SSXpDfocZACM9acA?g_st=icj"
+    },
+    {
+      "id": "mario",
+      "type": "晚餐",
+      "title": "Ishigaki beef MARU（12 位）",
+      "date": "2026-09-18",
+      "time": "17:30",
+      "location": "石垣島",
+      "status": "原文件有時段；訂位待確認"
+    },
+    {
+      "id": "flight-return",
+      "type": "航班",
+      "title": "IT737 石垣 → 桃園",
+      "date": "2026-09-22",
+      "time": "09:25–09:35（來源原文，時區待確認）",
+      "location": "石垣 ISG → 桃園 TPE",
+      "status": "已開票（來源）"
+    }
+  ],
+  "costs": {
+    "currency": "TWD",
+    "entries": [
+      {
+        "id": "fee-per-person",
+        "title": "每人團費（含機票、租車、住宿、兩天船潛）",
+        "amount": 27000,
+        "category": "團費／每人；原文件"
+      }
+    ]
+  },
+  "notes": [
+    {
+      "id": "included",
+      "title": "費用包含",
+      "body": "每人團費新台幣 27,000 元。原文件註明：機票已開票、三輛五人座車已預定、雙人間一人一床住宿已預定、兩天包船船潛已付款。此處僅呈現原文件資訊，非即時付款狀態。"
+    },
+    {
+      "id": "food",
+      "title": "早餐與住宿備註",
+      "body": "住宿沒有含早餐。附近步行可達全家與超市，可自行準備。住宿有廚房；原文件建議先確認器具是否足夠，可能購買食材煮火鍋。"
+    },
+    {
+      "id": "diving-boat",
+      "title": "船潛前準備",
+      "body": "先在衣服內穿好泳衣／防寒衣，攜帶毛巾、飲用水、乾衣與防風外套，準備簡便餐點或零食，容易暈船者先向醫師或藥師確認合適藥物。蛙鞋可能磨腳，原文件建議厚襪子。預計 07:50 到集合點附近找車位，船家 08:10 集合，08:30 出船，16:00 或 16:30 回程。"
+    },
+    {
+      "id": "shore-spots",
+      "title": "岸潛候選點與原文地形",
+      "body": "米原海灘：近岸礁坪淺、外側斷層；青之洞窟：約 5–10 m；Osaki Beach：沙地散礁，外坡約 15–25 m；山原海岸：V 字形峽谷及通道，外圍約 15–20 m；川平石崎海域：Manta 清潔站礁盤，約 8–15 m。深度與環境均摘錄來源，非當日安全保證。"
+    },
+    {
+      "id": "shore-safety",
+      "title": "岸潛安全（必讀）",
+      "body": "原文件提醒：低潮可能露礁或水深不足，進出可能受潮汐流與離岸流影響，且需避免破壞珊瑚。來源建議滿潮前後，但任何進出水判斷仍需由當地具資格的潛店／教練依即時海況評估；不要只憑網頁文字自行下水。"
+    },
+    {
+      "id": "source-conflicts",
+      "title": "待核對的原始資料",
+      "body": "9/18 行程表租車 09:30，而租車資料 10:00。9/22 IT737 原文為 09:25–09:35，可能分別是日本與台灣當地時間，務必核對電子機票。9/21 鍾乳洞原文票價 250$，幣別未註明。9/21 岸潛仍為候選而非確定潛點。"
+    },
+    {
+      "id": "privacy",
+      "title": "公開頁面注意",
+      "body": "本站部署在公開 GitHub Pages。私人預約編號與同行者姓名未寫入公開資料。如需保存請使用網站「更多」中的裝置本機備註；本機備註不會同步給同行者。"
+    }
+  ],
+  "files": [
+    {
+      "id": "original-itinerary",
+      "title": "原始 Google Docs 行程（動態調整中）",
+      "type": "參考來源",
+      "url": "https://docs.google.com/document/d/1in0UFMqSc_ZhXo1bsyK4G2yJ0giDaayiTTjCaoDhE2g/edit"
+    }
+  ],
+  "contacts": [
+    {
+      "id": "nippon-rental",
+      "name": "NIPPON 租車・石垣機場營業所",
+      "role": "租車櫃檯；地址：沖縄県石垣市盛山東牛種子222-5（來源原文）",
+      "phone": "050-1712-2421"
+    }
+  ],
+  "links": [
+    {
+      "id": "hotel-map",
+      "url": "https://maps.app.goo.gl/SRKjNoR4kbzc18d98",
+      "label": "住宿 Google Maps"
+    },
+    {
+      "id": "boat-map",
+      "url": "https://maps.app.goo.gl/SSXpDfocZACM9acA?g_st=icj",
+      "label": "船潛集合 Google Maps"
+    },
+    {
+      "id": "restaurant-map",
+      "url": "https://maps.app.goo.gl/RXJFLNzY46E2fv1h6?g_st=i",
+      "label": "Yiming 餐廳推薦 Google Maps 清單"
+    }
+  ]
+}

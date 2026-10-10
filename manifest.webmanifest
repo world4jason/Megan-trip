@@ -1,0 +1,19 @@
+{
+  "name": "傑瑞團｜石垣島旅遊助手",
+  "short_name": "石垣島行程",
+  "description": "傑瑞團石垣島五天四夜｜行程、地圖、潛水資訊與行李清單",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "lang": "zh-TW",
+  "background_color": "#070a12",
+  "theme_color": "#0b1020",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
