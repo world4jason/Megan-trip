@@ -47,18 +47,23 @@ try {
   const island=await page.locator(".trip-overview-hero")
     .evaluate(el=>getComputedStyle(el,"::after").backgroundImage);
   assert.match(island,/ishigaki-scene.svg/);
+  const choose = async (choice) => {
+    await page.locator("[data-style-picker-open]").click();
+    await page.locator('[data-style-choice="'+choice+'"]').click();
+    await page.waitForFunction(()=>!document.getElementById("style-picker-dialog").open);
+  };
   await page.locator("[data-view='more']").click();
   assert.equal(await page.locator(".style-option").count(),15);
   assert.ok((await page.locator("#view-root").innerText()).includes("預約與票券"));
-  await page.locator('[data-style-choice="editorial-dark"]').click();
+  await choose("editorial-dark");
   await page.waitForFunction(()=>state.visualStyle==="editorial"
     && document.documentElement.dataset.theme==="dark");
-  await page.locator('[data-style-choice="editorial-light"]').click();
+  await choose("editorial-light");
   await page.waitForFunction(()=>state.visualStyle==="editorial"
     && document.documentElement.dataset.theme==="light");
   console.log("MEGAN_STYLE editorial Light + Dark");
   for(const [style,bg] of Object.entries(expectedColors)){
-    await page.locator('[data-style-choice="'+style+'"]').click();
+    await choose(style);
     await page.waitForFunction(name=>{
       const link=document.getElementById(name+"-style");
       return state.visualStyle===name
@@ -70,7 +75,9 @@ try {
     assert.equal(await page.locator(".style-option").count(),15);
     console.log("MEGAN_STYLE",style,bg);
   }
+  await page.locator("[data-style-picker-open]").click();
   await page.locator("[data-style-reset]").click();
+  await page.waitForFunction(()=>!document.getElementById("style-picker-dialog").open);
   await page.waitForFunction(()=>state.visualStyle==="storybook"&&state.styleSource==="trip");
   await page.locator("[data-view='trip']").click();
   assert.equal(await page.locator(".trip-overview-day").count(),5);
@@ -83,8 +90,26 @@ try {
   assert.ok((await page.locator(".map-library-fallback").innerText()).includes("尚未標註精確座標"));
   await page.locator("[data-view='check']").click();
   assert.equal(await page.locator("input[data-check-key]").count(),39);
+  const desktop = await context.newPage({viewport:{width:1440,height:900}});
+  // A separate context is needed for a distinct desktop viewport; the site
+  // preference is still per trip and device-scoped.
+  await desktop.setViewportSize({width:1440,height:900});
+  await desktop.goto(base+"#more",{waitUntil:"domcontentloaded"});
+  // Geometry assertions should inspect the stable layout, not the 180ms
+  // entrance slide's initial +16px translateX transform.
+  await desktop.emulateMedia({reducedMotion:"reduce"});
+  await desktop.locator("[data-style-picker-open]").click();
+  await desktop.waitForFunction(()=>document.getElementById("style-picker-dialog").open);
+  const drawer=await desktop.locator("#style-picker-dialog").evaluate(el=>el.getBoundingClientRect().toJSON());
+  assert.ok(drawer.x>800 && drawer.right<=1441);
+  await desktop.locator('[data-style-choice="painterly-editorial"]').click();
+  await desktop.waitForFunction(()=>state.visualStyle==="painterly-editorial");
+  assert.equal(await desktop.locator("#style-picker-dialog").evaluate(el=>el.open),true);
+  await desktop.keyboard.press("Escape");
+  assert.equal(await desktop.locator("#style-picker-dialog").evaluate(el=>el.open),false);
+  await desktop.close();
   assert.deepEqual(errors,[]);
-  console.log("MEGAN_FIFTEEN_LOOKS_PASS five days, 30 stops, 39 checklist, island art, map fallback");
+  console.log("MEGAN_FIFTEEN_LOOKS_PASS five days, 30 stops, 39 checklist, island art, map fallback, responsive picker");
   await context.close();
 } finally{
  await browser?.close();
