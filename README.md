@@ -70,7 +70,7 @@ npm run test:megan-styles
 若要調整行程資料，請參考 [docs/TRIP_SCHEMA.md](./docs/TRIP_SCHEMA.md) 與 [docs/SOURCE_NORMALIZATION.md](./docs/SOURCE_NORMALIZATION.md)。
 ## 十五種網站外觀／與上游相同的 Style Pack
 
-開啟 [Megan-trip 的「資訊 → 外觀」](https://world4jason.github.io/Megan-trip/#more) 即可立即切換，不必修改程式或網址。選項：
+開啟 [Megan-trip 的「資訊 → 外觀」](https://world4jason.github.io/Megan-trip/#more)，會先看到**目前風格與切換按鈕**，不再攤開 15 張卡片。手機點擊後從底部滑出可捲動 Bottom Sheet，選完會自動關閉；桌機則從右側滑出 Drawer，可連續比較。兩種介面都有 Esc、關閉／完成與鍵盤焦點保護。不必修改程式或網址。選項：
 
 | 外觀 | 實際 Style Pack | 說明 |
 | --- | --- | --- |
