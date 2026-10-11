@@ -17,7 +17,7 @@
 | 清單 | 39 項裝備與行李清單、5 項行前核對，進度只存在當前裝置 |
 | 資訊 | 航班、租車、住宿、船潛、費用、聯絡資訊與備註 |
 
-支援繁體中文導覽、手機／桌機響應式佈局、**九種可切換的視覺外觀**（八套 Style Pack，Editorial 分成淺色與深色）、PWA/離線快取與可分享的行程深層連結。
+支援繁體中文導覽、手機／桌機響應式佈局、**十五種可切換的視覺外觀**（十四套 Style Pack，Editorial 分成淺色與深色）、PWA/離線快取與可分享的行程深層連結。
 
 **地圖限制：**原始文件除了住宿與船潛集合點的 Google Maps 分享連結之外，沒有提供經緯度，因此這版不會杜撰其他精確地點座標。地圖分頁仍保留每日地點清單與「Open in Maps」外開導航；互動地圖上的定位標記待日後核實座標後再補。
 
@@ -68,7 +68,7 @@ npm run test:megan-styles
 此專案沿用 `world4jason/Travel-lite-Template` 的 HTML/CSS/JS、資料模型、PWA、測試與相關文件。上游採用 **AGPL-3.0-or-later**，本 repo 保留原本的 [LICENSE](./LICENSE)、[NOTICE.md](./NOTICE.md) 與 [AGENTS.md](./AGENTS.md)。
 
 若要調整行程資料，請參考 [docs/TRIP_SCHEMA.md](./docs/TRIP_SCHEMA.md) 與 [docs/SOURCE_NORMALIZATION.md](./docs/SOURCE_NORMALIZATION.md)。
-## 九種網站外觀／與上游相同的 Style Pack
+## 十五種網站外觀／與上游相同的 Style Pack
 
 開啟 [Megan-trip 的「資訊 → 外觀」](https://world4jason.github.io/Megan-trip/#more) 即可立即切換，不必修改程式或網址。選項：
 
@@ -83,6 +83,12 @@ npm run test:megan-styles
 | Risograph Zine | `risograph` | 靛藍網點與復古印刷 |
 | Taiwan Retro Poster | `taiwan-poster` | 深海軍藍、赭黃、朱紅，幾何海報式構圖 |
 | Field Stamp | `field-stamp` | 手刻印章、乾墨破線與田野筆記 |
+| Quiet Linocut | `quiet-linocut` | 靜謐版刻、撕右邊、小主體大留白 |
+| Doodle Memory Grid | `doodle-memory-grid` | 鬆散九宮格、彩鉛手繪圖示 |
+| Crayon Journal | `crayon-journal` | 橫向蠟筆記憶小場景 |
+| Painterly Editorial | `painterly-editorial` | 柔藍水粉、可見乾筆 |
+| Geometric Print | `geometric-print` | 銳利多邊形、無描邊色面 |
+| Quiet Acrylic | `quiet-acrylic` | 小主體、極大留白、纖細壓克力線稿 |
 
 **切換只存在此裝置**。同行者不會受到影響；按「跟隨行程預設」即可恢復 Megan 的 Storybook。分享連結的 `?previewStyle=...` 是暫時預覽；你在設定頁選擇後會移除預覽參數，仍保留目前所看的日期／頁面。
 
@@ -94,8 +100,8 @@ npm run test:megan-styles
 
 兩個 Pages 在同一個 `world4jason.github.io` origin，`sw.js` 使用依專案 scope 區分的快取命名，避免更新一邊時清除另一邊的離線快取。
 
-- [Megan-trip：九種外觀](https://world4jason.github.io/Megan-trip/#more)
-- [Travel-lite-Template：九種外觀](https://world4jason.github.io/Travel-lite-Template/#more)
+- [Megan-trip：十五種外觀](https://world4jason.github.io/Megan-trip/#more)
+- [Travel-lite-Template：十五種外觀](https://world4jason.github.io/Travel-lite-Template/#more)
 - [四套新風格的實際截圖](./style-packs/README.md)
 - [下一個自然語言提示詞的 E2E 驗收流程](./style-generator/NEXT_PROMPT_E2E.md)
 
@@ -119,3 +125,10 @@ npm run test:megan-styles
 # 在 Travel-lite-Template 目錄
 MEGAN_LOCAL_REPO=../Megan-trip npm run test:style-parity
 ```
+
+
+## 第二批提示詞：風格去重與共用實作
+
+第二批收到八段照片轉海報提示詞，[風格去重紀錄](./style-generator/batches/2026-10-11-editorial-posters.md)將兩段 RISO 納回既有 Risograph，另外六段新增 Style Pack。**沒有新增上下各半的原始照片面板、固定英文詩句、虛構地點／年份，也未修改原始五天三十個行程項目。**
+
+新 Style Pack 與上游採用相同 CSS／SVG／Manifest，Megan 原本專屬的 `megan-local.css` 僅在 Storybook 生效；風格只保存在旅客本機的 per-trip 設定。另附手機／桌機的實際 Megan 預覽與跨站 SHA-256＋瀏覽器 computed-style 驗收。

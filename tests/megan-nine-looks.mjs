@@ -9,7 +9,13 @@ const expectedColors={
  "storybook":"rgb(255, 252, 246)","candy":"rgb(255, 249, 239)",
  "paper-collage":"rgb(250, 243, 228)","naive-city":"rgb(250, 245, 233)",
  "risograph":"rgb(247, 241, 228)","taiwan-poster":"rgb(245, 231, 196)",
- "field-stamp":"rgb(247, 240, 227)"
+ "field-stamp":"rgb(247, 240, 227)",
+ "quiet-linocut": "rgb(244, 237, 221)",
+ "doodle-memory-grid": "rgb(251, 246, 234)",
+ "crayon-journal": "rgb(250, 242, 230)",
+ "painterly-editorial": "rgb(244, 247, 241)",
+ "geometric-print": "rgb(245, 240, 229)",
+ "quiet-acrylic": "rgb(252, 250, 243)"
 };
 let browser;
 const server=spawn(process.execPath,["tests/serve.mjs"],{
@@ -42,7 +48,7 @@ try {
     .evaluate(el=>getComputedStyle(el,"::after").backgroundImage);
   assert.match(island,/ishigaki-scene.svg/);
   await page.locator("[data-view='more']").click();
-  assert.equal(await page.locator(".style-option").count(),9);
+  assert.equal(await page.locator(".style-option").count(),15);
   assert.ok((await page.locator("#view-root").innerText()).includes("預約與票券"));
   await page.locator('[data-style-choice="editorial-dark"]').click();
   await page.waitForFunction(()=>state.visualStyle==="editorial"
@@ -61,7 +67,7 @@ try {
     },style,{timeout:15000});
     await page.waitForFunction(color=>
       getComputedStyle(document.body).backgroundColor===color,bg,{timeout:15000});
-    assert.equal(await page.locator(".style-option").count(),9);
+    assert.equal(await page.locator(".style-option").count(),15);
     console.log("MEGAN_STYLE",style,bg);
   }
   await page.locator("[data-style-reset]").click();
@@ -78,7 +84,7 @@ try {
   await page.locator("[data-view='check']").click();
   assert.equal(await page.locator("input[data-check-key]").count(),39);
   assert.deepEqual(errors,[]);
-  console.log("MEGAN_NINE_LOOKS_PASS five days, 30 stops, 39 checklist, island art, map fallback");
+  console.log("MEGAN_FIFTEEN_LOOKS_PASS five days, 30 stops, 39 checklist, island art, map fallback");
   await context.close();
 } finally{
  await browser?.close();
